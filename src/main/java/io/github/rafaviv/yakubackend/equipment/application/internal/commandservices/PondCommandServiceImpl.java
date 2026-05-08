@@ -1,0 +1,32 @@
+package io.github.rafaviv.yakubackend.equipment.application.internal.commandservices;
+
+import io.github.rafaviv.yakubackend.equipment.domain.model.aggregates.Pond;
+import io.github.rafaviv.yakubackend.equipment.domain.services.PondCommandService;
+import io.github.rafaviv.yakubackend.equipment.infrastructure.persistence.jpa.repositories.PondRepository;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
+@Service
+public class PondCommandServiceImpl implements PondCommandService {
+
+    private final PondRepository pondRepository;
+
+    public PondCommandServiceImpl(PondRepository pondRepository) {
+        this.pondRepository = pondRepository;
+    }
+
+    @Override
+    public Optional<Pond> createPond(Long farmId, String name, String species, Double volume) {
+        Pond pond = new Pond(farmId, name, species, volume);
+        return Optional.of(pondRepository.save(pond));
+    }
+
+    @Override
+    public void deletePond(Long pondId) {
+        if (!pondRepository.existsById(pondId)) {
+            throw new IllegalArgumentException("Pond not found with id: " + pondId);
+        }
+        pondRepository.deleteById(pondId);
+    }
+}
