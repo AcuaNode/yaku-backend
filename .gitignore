@@ -31,9 +31,3 @@ build/
 
 ### VS Code ###
 .vscode/
-
-### Antigravity (AI Assistant) ###
-# Ignorar estado temporal o caché si en el futuro se genera
-.agents/*
-# Excepción obligatoria: SIEMPRE versionar las reglas arquitectónicas
-!.agents/rules/
