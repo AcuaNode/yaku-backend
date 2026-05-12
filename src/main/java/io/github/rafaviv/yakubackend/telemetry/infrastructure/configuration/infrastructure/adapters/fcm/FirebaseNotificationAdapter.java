@@ -1,6 +1,6 @@
-package io.github.rafaviv.yakubackend.subscription.infrastructure.adapters.fcm;
+package io.github.rafaviv.yakubackend.telemetry.infrastructure.configuration.infrastructure.adapters.fcm;
 
-import io.github.rafaviv.yakubackend.subscription.domain.services.NotificationService;
+import io.github.rafaviv.yakubackend.subscription.interfaces.events.services.NotificationService;
 import org.springframework.stereotype.Service;
 
 @Service

@@ -1,23 +1,17 @@
-package io.github.rafaviv.yakubackend.subscription.infrastructure.adapters.stripe;
+package io.github.rafaviv.yakubackend.telemetry.infrastructure.configuration.infrastructure.adapters.stripe;
 
 import io.github.rafaviv.yakubackend.subscription.domain.model.valueobjects.Currency;
 import io.github.rafaviv.yakubackend.subscription.domain.model.valueobjects.PaymentStatus;
-import io.github.rafaviv.yakubackend.subscription.domain.model.services.ExternalPaymentService;
+import io.github.rafaviv.yakubackend.subscription.interfaces.events.services.ExternalPaymentService;
 import org.springframework.stereotype.Service;
 
-/**
- * Patrón: Adapter / Anti-Corruption Layer (ACL)
- * Si Stripe cambia su API, solo modificamos este archivo.
- */
 @Service
 public class StripePaymentAdapter implements ExternalPaymentService {
-
     @Override
     public PaymentStatus processPayment(Long userId, Double amount, Currency currency, String paymentMethodId) {
-
-        System.out.println("[STRIPE ACL] Procesando pago de " + amount + " " + currency + " para el usuario " + userId);
-
+        // Placeholder for Stripe implementation
+        System.out
+                .println("Processing payment of " + amount + " " + currency + " for user " + userId + " using Stripe");
         return PaymentStatus.SUCCESS;
     }
 }
-

@@ -1,4 +1,4 @@
-package io.github.rafaviv.yakubackend.iam.infrastructure.tokens.jwt.services;
+package io.github.rafaviv.yakubackend.iam.interfaces.rest.resources.services;
 
 import io.github.rafaviv.yakubackend.iam.infrastructure.tokens.jwt.BearerTokenService;
 import io.jsonwebtoken.Claims;
