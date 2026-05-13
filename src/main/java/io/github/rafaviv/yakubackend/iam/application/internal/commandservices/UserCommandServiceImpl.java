@@ -13,7 +13,8 @@ import io.github.rafaviv.yakubackend.iam.domain.model.exceptions.UserAccountDeac
 import io.github.rafaviv.yakubackend.iam.domain.model.exceptions.UserAlreadyExistsException;
 import io.github.rafaviv.yakubackend.iam.domain.services.RoleValidationService;
 import io.github.rafaviv.yakubackend.iam.domain.services.UserCommandService;
-import io.github.rafaviv.yakubackend.equipment.interfaces.acl.EquipmentContextFacade;
+import io.github.rafaviv.yakubackend.iam.domain.model.aggregates.FarmToken;
+import io.github.rafaviv.yakubackend.iam.infrastructure.persistence.jpa.repositories.FarmTokenRepository;
 import io.github.rafaviv.yakubackend.iam.infrastructure.persistence.jpa.repositories.RoleRepository;
 import io.github.rafaviv.yakubackend.iam.infrastructure.persistence.jpa.repositories.UserRepository;
 import org.slf4j.Logger;
@@ -43,7 +44,7 @@ public class UserCommandServiceImpl implements UserCommandService {
     private final TokenService tokenService;
     private final RoleValidationService roleValidationService;
     private final org.springframework.context.ApplicationEventPublisher eventPublisher;
-    private final EquipmentContextFacade equipmentContextFacade;
+    private final FarmTokenRepository farmTokenRepository;
 
 
     public UserCommandServiceImpl(
@@ -53,14 +54,14 @@ public class UserCommandServiceImpl implements UserCommandService {
             TokenService tokenService,
             RoleValidationService roleValidationService,
             org.springframework.context.ApplicationEventPublisher eventPublisher,
-            EquipmentContextFacade equipmentContextFacade) {
+            FarmTokenRepository farmTokenRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.hashingService = hashingService;
         this.tokenService = tokenService;
         this.roleValidationService = roleValidationService;
         this.eventPublisher = eventPublisher;
-        this.equipmentContextFacade = equipmentContextFacade;
+        this.farmTokenRepository = farmTokenRepository;
     }
 
     @Override
@@ -79,12 +80,16 @@ public class UserCommandServiceImpl implements UserCommandService {
         }
 
         // Validate FarmToken if role is OPERATOR
+        FarmToken farmToken = null;
         if (command.requestedRole() == io.github.rafaviv.yakubackend.iam.domain.model.valueobjects.Roles.OPERATOR) {
             if (command.farmToken() == null || command.farmToken().isBlank()) {
                 throw new IllegalArgumentException("Farm token is required for OPERATOR role");
             }
-            if (!equipmentContextFacade.isValidAndUnusedFarmToken(command.farmToken())) {
-                throw new IllegalArgumentException("Invalid or already used Farm token");
+            farmToken = farmTokenRepository.findByToken(command.farmToken())
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid Farm token"));
+            
+            if (farmToken.isUsed()) {
+                throw new IllegalArgumentException("Farm token is already used");
             }
         }
 
@@ -107,9 +112,13 @@ public class UserCommandServiceImpl implements UserCommandService {
         
         user.addRole(requestedRole);
         
-        // Assign Farm ID if role is OPERATOR
-        if (command.requestedRole() == io.github.rafaviv.yakubackend.iam.domain.model.valueobjects.Roles.OPERATOR) {
-            equipmentContextFacade.findFarmIdByToken(command.farmToken()).ifPresent(user::setAssignedFarmId);
+        // Assign Farm ID and mark token as used if role is OPERATOR
+        Long assignedFarmId = null;
+        if (command.requestedRole() == io.github.rafaviv.yakubackend.iam.domain.model.valueobjects.Roles.OPERATOR && farmToken != null) {
+            assignedFarmId = farmToken.getFarmId();
+            user.setAssignedFarmId(assignedFarmId);
+            farmToken.markAsUsed();
+            farmTokenRepository.save(farmToken);
         }
 
         // Save user
@@ -118,7 +127,7 @@ public class UserCommandServiceImpl implements UserCommandService {
 
         // Publish event
         eventPublisher.publishEvent(new io.github.rafaviv.yakubackend.iam.domain.model.events.UserRegisteredEvent(
-                savedUser.getId(), savedUser.getUsername(), savedUser.getEmail().address(), command.farmToken()));
+                savedUser.getId(), savedUser.getUsername(), savedUser.getEmail().address(), assignedFarmId));
     }
 
     @Override

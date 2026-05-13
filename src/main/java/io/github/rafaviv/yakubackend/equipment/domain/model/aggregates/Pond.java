@@ -29,8 +29,6 @@ public class Pond extends AuditableAbstractAggregateRoot<Pond> {
     @Column(nullable = false)
     private PondStatus status;
 
-    private Long assignedFishFarmerId;
-
     public Pond() {
         // JPA requires a default constructor
     }
@@ -41,10 +39,6 @@ public class Pond extends AuditableAbstractAggregateRoot<Pond> {
         this.species = species;
         this.volume = volume;
         this.status = PondStatus.ACTIVE;
-    }
-
-    public void assignFishFarmer(Long fishFarmerId) {
-        this.assignedFishFarmerId = fishFarmerId;
     }
 
     public void updateStatus(PondStatus status) {

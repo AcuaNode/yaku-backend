@@ -11,14 +11,4 @@ public class EquipmentContextFacadeImpl implements EquipmentContextFacade {
     public EquipmentContextFacadeImpl(FarmRepository farmRepository) {
         this.farmRepository = farmRepository;
     }
-
-    @Override
-    public boolean isValidAndUnusedFarmToken(String token) {
-        return farmRepository.findByFarmToken(token).isPresent();
-    }
-
-    @Override
-    public java.util.Optional<Long> findFarmIdByToken(String token) {
-        return farmRepository.findByFarmToken(token).map(io.github.rafaviv.yakubackend.equipment.domain.model.aggregates.Farm::getId);
-    }
 }

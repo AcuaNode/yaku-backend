@@ -11,8 +11,7 @@ public class PondResourceFromEntityAssembler {
                 entity.getName(),
                 entity.getSpecies(),
                 entity.getVolume(),
-                entity.getStatus().name(),
-                entity.getAssignedFishFarmerId()
+                entity.getStatus().name()
         );
     }
 }

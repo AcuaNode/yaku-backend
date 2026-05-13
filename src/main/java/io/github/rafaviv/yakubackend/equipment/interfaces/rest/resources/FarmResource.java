@@ -1,4 +1,4 @@
 package io.github.rafaviv.yakubackend.equipment.interfaces.rest.resources;
 
-public record FarmResource(Long id, String name, Long ownerId, String farmToken, String address) {
+public record FarmResource(Long id, String name, Long ownerId, String address) {
 }
