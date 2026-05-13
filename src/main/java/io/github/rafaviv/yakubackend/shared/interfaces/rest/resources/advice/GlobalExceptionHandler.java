@@ -1,4 +1,4 @@
-package io.github.rafaviv.yakubackend.shared.infrastructure.rest.resources;
+package io.github.rafaviv.yakubackend.shared.interfaces.rest.resources.advice;
 
 import io.github.rafaviv.yakubackend.shared.interfaces.rest.resources.ApiErrorResource;
 import org.springframework.http.HttpStatus;
