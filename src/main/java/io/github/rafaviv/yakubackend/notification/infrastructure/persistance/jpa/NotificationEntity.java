@@ -35,4 +35,7 @@ public class NotificationEntity {
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
+
+    @Column(nullable = false)
+    private boolean isRead = false;
 }

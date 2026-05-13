@@ -155,6 +155,17 @@ public class UserCommandServiceImpl implements UserCommandService {
         LOGGER.info("User authenticated successfully with ID: {}", user.getId());
     }
 
+    @Override
+    public void changePassword(Long userId, String currentPassword, String newPassword) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        if (!hashingService.matches(currentPassword, user.getPasswordHash())) {
+            throw new InvalidCredentialsException();
+        }
+        user.updatePassword(new HashedPassword(hashingService.encode(newPassword)));
+        userRepository.save(user);
+    }
+
     /**
      * Generate JWT token for authenticated user
      * @param user the authenticated user

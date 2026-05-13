@@ -44,4 +44,10 @@ public class Pond extends AuditableAbstractAggregateRoot<Pond> {
     public void updateStatus(PondStatus status) {
         this.status = status;
     }
+
+    public void update(String name, String species, Double volume) {
+        if (name != null && !name.isBlank()) this.name = name;
+        if (species != null) this.species = species;
+        if (volume != null && volume > 0) this.volume = volume;
+    }
 }

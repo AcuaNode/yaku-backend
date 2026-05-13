@@ -31,4 +31,12 @@ public class FarmCommandServiceImpl implements FarmCommandService {
         }
         farmRepository.deleteById(farmId);
     }
+
+    @Override
+    public Optional<Farm> regenerateToken(Long farmId) {
+        return farmRepository.findById(farmId).map(farm -> {
+            farm.regenerateFarmToken();
+            return farmRepository.save(farm);
+        });
+    }
 }

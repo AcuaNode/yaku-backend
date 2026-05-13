@@ -29,4 +29,12 @@ public class PondCommandServiceImpl implements PondCommandService {
         }
         pondRepository.deleteById(pondId);
     }
+
+    @Override
+    public Optional<Pond> updatePond(Long pondId, String name, String species, Double volume) {
+        return pondRepository.findById(pondId).map(pond -> {
+            pond.update(name, species, volume);
+            return pondRepository.save(pond);
+        });
+    }
 }

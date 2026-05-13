@@ -38,8 +38,8 @@ public class FarmController {
         if (farm.isEmpty()) return ResponseEntity.badRequest().build();
         
         var createdFarm = farm.get();
-        var farmResource = new FarmResource(createdFarm.getId(), createdFarm.getName(), createdFarm.getOwnerId(), createdFarm.getAddress());
-        
+        var farmResource = new FarmResource(createdFarm.getId(), createdFarm.getName(), createdFarm.getOwnerId(), createdFarm.getAddress(), createdFarm.getFarmToken());
+
         return new ResponseEntity<>(farmResource, HttpStatus.CREATED);
     }
 
@@ -66,9 +66,17 @@ public class FarmController {
         var query = new GetFarmsByOwnerIdQuery(adminId);
         var farms = farmQueryService.handle(query);
         var resources = farms.stream()
-                .map(farm -> new FarmResource(farm.getId(), farm.getName(), farm.getOwnerId(), farm.getAddress()))
+                .map(farm -> new FarmResource(farm.getId(), farm.getName(), farm.getOwnerId(), farm.getAddress(), farm.getFarmToken()))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(resources);
+    }
+
+    @PatchMapping("/{id}/token")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<FarmResource> regenerateToken(@PathVariable Long id) {
+        return farmCommandService.regenerateToken(id)
+                .map(farm -> ResponseEntity.ok(new FarmResource(farm.getId(), farm.getName(), farm.getOwnerId(), farm.getAddress(), farm.getFarmToken())))
+                .orElse(ResponseEntity.notFound().build());
     }
 
 }

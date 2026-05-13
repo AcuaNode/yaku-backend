@@ -4,6 +4,8 @@ import io.github.rafaviv.yakubackend.shared.domain.model.aggregates.AuditableAbs
 import jakarta.persistence.*;
 import lombok.Getter;
 
+import java.util.UUID;
+
 @Entity
 @Getter
 @Table(name = "farms")
@@ -22,6 +24,9 @@ public class Farm extends AuditableAbstractAggregateRoot<Farm> {
     @Column
     private String address;
 
+    @Column(nullable = false)
+    private String farmToken;
+
     public Farm() {
         // JPA requires a default constructor
     }
@@ -30,5 +35,10 @@ public class Farm extends AuditableAbstractAggregateRoot<Farm> {
         this.name = name;
         this.ownerId = ownerId;
         this.address = address;
+        this.farmToken = UUID.randomUUID().toString();
+    }
+
+    public void regenerateFarmToken() {
+        this.farmToken = UUID.randomUUID().toString();
     }
 }

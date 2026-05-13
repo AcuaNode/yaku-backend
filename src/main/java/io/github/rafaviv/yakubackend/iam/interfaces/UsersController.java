@@ -13,6 +13,7 @@ import io.github.rafaviv.yakubackend.iam.domain.model.queries.GetAllUsersQuery;
 import io.github.rafaviv.yakubackend.iam.domain.model.queries.GetUserByUsernameQuery;
 import io.github.rafaviv.yakubackend.iam.domain.services.RoleValidationService;
 import io.github.rafaviv.yakubackend.iam.interfaces.rest.resources.AuthenticationResponseResource;
+import io.github.rafaviv.yakubackend.iam.interfaces.rest.resources.ChangePasswordResource;
 import io.github.rafaviv.yakubackend.iam.interfaces.rest.resources.SignInResource;
 import io.github.rafaviv.yakubackend.iam.interfaces.rest.resources.SignUpResource;
 import io.github.rafaviv.yakubackend.iam.interfaces.rest.resources.UserResource;
@@ -212,8 +213,25 @@ public class UsersController {
     }
 
     /**
+     * Change user password
+     */
+    @PatchMapping("/{id}/password")
+    public ResponseEntity<?> changePassword(@PathVariable Long id, @RequestBody ChangePasswordResource resource) {
+        try {
+            userCommandService.changePassword(id, resource.currentPassword(), resource.newPassword());
+            return ResponseEntity.ok().build();
+        } catch (io.github.rafaviv.yakubackend.iam.domain.model.exceptions.InvalidCredentialsException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Contraseña actual incorrecta");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al cambiar la contraseña");
+        }
+    }
+
+    /**
      * Get available roles for registration
-     * 
+     *
      * @return ResponseEntity with list of available roles
      */
     @GetMapping("/available-roles")

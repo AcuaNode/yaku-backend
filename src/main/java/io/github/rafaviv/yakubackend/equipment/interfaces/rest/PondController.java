@@ -83,4 +83,12 @@ public class PondController {
                 .collect(Collectors.toList());
         return ResponseEntity.ok(resources);
     }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<PondResource> updatePond(@PathVariable Long id, @RequestBody CreatePondResource resource) {
+        return pondCommandService.updatePond(id, resource.name(), resource.species(), resource.volume())
+                .map(pond -> ResponseEntity.ok(PondResourceFromEntityAssembler.toResourceFromEntity(pond)))
+                .orElse(ResponseEntity.notFound().build());
+    }
 }
