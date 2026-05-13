@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
  * Si Stripe cambia su API, solo modificamos este archivo.
  */
 @Service
-public class StripePaymentAdapter implements ExternalPaymentService {
+public class StripePaymentAdapterACL implements ExternalPaymentService {
 
     @Override
     public PaymentStatus processPayment(Long userId, Double amount, Currency currency, String paymentMethodId) {
