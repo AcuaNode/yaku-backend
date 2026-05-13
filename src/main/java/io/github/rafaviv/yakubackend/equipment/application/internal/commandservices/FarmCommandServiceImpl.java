@@ -25,14 +25,6 @@ public class FarmCommandServiceImpl implements FarmCommandService {
     }
 
     @Override
-    public Optional<Farm> regenerateFarmToken(Long farmId) {
-        return farmRepository.findById(farmId).map(farm -> {
-            farm.regenerateFarmToken();
-            return farmRepository.save(farm);
-        });
-    }
-
-    @Override
     public void deleteFarm(Long farmId) {
         if (!farmRepository.existsById(farmId)) {
             throw new IllegalArgumentException("Farm not found with id: " + farmId);

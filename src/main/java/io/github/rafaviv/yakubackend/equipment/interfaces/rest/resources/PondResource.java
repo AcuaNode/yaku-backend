@@ -6,7 +6,6 @@ public record PondResource(
         String name,
         String species,
         Double volume,
-        String status,
-        Long assignedFishFarmerId
+        String status
 ) {
 }

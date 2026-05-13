@@ -1,6 +1,6 @@
-package io.github.rafaviv.yakubackend.equipment.infrastructure.persistence.jpa.repositories;
+package io.github.rafaviv.yakubackend.iam.infrastructure.persistence.jpa.repositories;
 
-import io.github.rafaviv.yakubackend.equipment.domain.model.aggregates.FarmToken;
+import io.github.rafaviv.yakubackend.iam.domain.model.aggregates.FarmToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

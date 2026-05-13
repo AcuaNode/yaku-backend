@@ -1,4 +1,4 @@
-package io.github.rafaviv.yakubackend.equipment.domain.model.aggregates;
+package io.github.rafaviv.yakubackend.iam.domain.model.aggregates;
 
 import io.github.rafaviv.yakubackend.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
 import jakarta.persistence.*;

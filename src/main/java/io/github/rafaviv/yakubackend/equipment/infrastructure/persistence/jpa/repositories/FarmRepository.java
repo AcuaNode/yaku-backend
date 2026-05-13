@@ -10,5 +10,4 @@ import java.util.Optional;
 @Repository
 public interface FarmRepository extends JpaRepository<Farm, Long> {
     List<Farm> findByOwnerId(Long ownerId);
-    Optional<Farm> findByFarmToken(String farmToken);
 }

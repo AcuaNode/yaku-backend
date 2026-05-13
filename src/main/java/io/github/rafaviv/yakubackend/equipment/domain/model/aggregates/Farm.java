@@ -19,9 +19,6 @@ public class Farm extends AuditableAbstractAggregateRoot<Farm> {
     @Column(nullable = false)
     private Long ownerId; // Equivalent to ADMIN ID
 
-    @Column(nullable = false, unique = true)
-    private String farmToken;
-
     @Column
     private String address;
 
@@ -33,10 +30,5 @@ public class Farm extends AuditableAbstractAggregateRoot<Farm> {
         this.name = name;
         this.ownerId = ownerId;
         this.address = address;
-        this.farmToken = java.util.UUID.randomUUID().toString();
-    }
-
-    public void regenerateFarmToken() {
-        this.farmToken = java.util.UUID.randomUUID().toString();
     }
 }
