@@ -3,8 +3,9 @@ package io.github.rafaviv.yakubackend.subscription.application.internal.commands
 import io.github.rafaviv.yakubackend.subscription.domain.model.aggregates.Subscription;
 import io.github.rafaviv.yakubackend.subscription.domain.model.entities.Plan;
 import io.github.rafaviv.yakubackend.subscription.domain.model.valueobjects.SubscriptionPeriod;
-import io.github.rafaviv.yakubackend.subscription.infrastructure.persistence.jpa.repositories.PlanRepository;
-import io.github.rafaviv.yakubackend.subscription.infrastructure.persistence.jpa.repositories.SubscriptionRepository;
+import io.github.rafaviv.yakubackend.telemetry.infrastructure.configuration.infrastructure.persistence.jpa.repositories.PlanRepository;
+import io.github.rafaviv.yakubackend.telemetry.infrastructure.configuration.infrastructure.persistence.jpa.repositories.PaymentRepository;
+import io.github.rafaviv.yakubackend.telemetry.infrastructure.configuration.infrastructure.persistence.jpa.repositories.SubscriptionRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,10 +15,10 @@ import java.time.LocalDate;
 public class SubscriptionCommandServiceImpl implements SubscriptionCommandService {
     private final SubscriptionRepository subscriptionRepository;
     private final PlanRepository planRepository;
-    private final io.github.rafaviv.yakubackend.subscription.infrastructure.persistence.jpa.repositories.PaymentRepository paymentRepository;
+    private final PaymentRepository paymentRepository;
 
     public SubscriptionCommandServiceImpl(SubscriptionRepository subscriptionRepository, PlanRepository planRepository,
-            io.github.rafaviv.yakubackend.subscription.infrastructure.persistence.jpa.repositories.PaymentRepository paymentRepository) {
+            PaymentRepository paymentRepository) {
         this.subscriptionRepository = subscriptionRepository;
         this.planRepository = planRepository;
         this.paymentRepository = paymentRepository;

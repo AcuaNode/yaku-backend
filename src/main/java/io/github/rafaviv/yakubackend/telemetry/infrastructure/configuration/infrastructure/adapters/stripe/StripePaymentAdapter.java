@@ -1,8 +1,8 @@
-package io.github.rafaviv.yakubackend.subscription.infrastructure.adapters.stripe;
+package io.github.rafaviv.yakubackend.telemetry.infrastructure.configuration.infrastructure.adapters.stripe;
 
 import io.github.rafaviv.yakubackend.subscription.domain.model.valueobjects.Currency;
 import io.github.rafaviv.yakubackend.subscription.domain.model.valueobjects.PaymentStatus;
-import io.github.rafaviv.yakubackend.subscription.domain.services.ExternalPaymentService;
+import io.github.rafaviv.yakubackend.subscription.interfaces.events.services.ExternalPaymentService;
 import org.springframework.stereotype.Service;
 
 @Service

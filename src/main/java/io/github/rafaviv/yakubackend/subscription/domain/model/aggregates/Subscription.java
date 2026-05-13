@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Entity
 @Getter
 @Setter
@@ -33,11 +35,35 @@ public class Subscription extends AuditableModel {
     @Column(nullable = false)
     private SubscriptionStatus status;
 
+    // Constructor existente
     public Subscription(Long userId, Plan plan, SubscriptionPeriod period) {
         this.userId = userId;
         this.plan = plan;
         this.period = period;
         this.status = SubscriptionStatus.ACTIVE;
+    }
+
+    /**
+     * NUEVO: Constructor para el Test y para nuevos registros
+     * Permite crear una suscripción base que luego será activada con un plan.
+     */
+    public Subscription(Long userId) {
+        this.userId = userId;
+        this.status = SubscriptionStatus.CANCELLED;
+    }
+
+    /**
+     * NUEVO: Lógica de Negocio Encapsulada (Patrón: Tell, Don't Ask)
+     * La entidad es responsable de calcular su propio periodo basándose en el plan.
+     */
+    public void subscribeToPlan(Plan plan) {
+        this.plan = plan;
+        this.status = SubscriptionStatus.ACTIVE;
+        // Calculamos el periodo internamente usando la duración del plan
+        this.period = new SubscriptionPeriod(
+                LocalDate.now(),
+                LocalDate.now().plusDays(plan.getDurationInDays())
+        );
     }
 
     public void cancel() {

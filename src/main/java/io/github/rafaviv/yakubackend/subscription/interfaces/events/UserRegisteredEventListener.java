@@ -2,7 +2,7 @@ package io.github.rafaviv.yakubackend.subscription.interfaces.events;
 
 import io.github.rafaviv.yakubackend.iam.domain.model.events.UserRegisteredEvent;
 import io.github.rafaviv.yakubackend.subscription.application.internal.commandservices.SubscriptionCommandService;
-import io.github.rafaviv.yakubackend.subscription.infrastructure.persistence.jpa.repositories.PlanRepository;
+import io.github.rafaviv.yakubackend.telemetry.infrastructure.configuration.infrastructure.persistence.jpa.repositories.PlanRepository;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 

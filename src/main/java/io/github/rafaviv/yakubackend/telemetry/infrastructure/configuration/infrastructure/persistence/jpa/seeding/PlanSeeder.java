@@ -1,8 +1,8 @@
-package io.github.rafaviv.yakubackend.subscription.infrastructure.persistence.jpa.seeding;
+package io.github.rafaviv.yakubackend.telemetry.infrastructure.configuration.infrastructure.persistence.jpa.seeding;
 
 import io.github.rafaviv.yakubackend.subscription.domain.model.entities.Plan;
 import io.github.rafaviv.yakubackend.subscription.domain.model.valueobjects.Currency;
-import io.github.rafaviv.yakubackend.subscription.infrastructure.persistence.jpa.repositories.PlanRepository;
+import io.github.rafaviv.yakubackend.telemetry.infrastructure.configuration.infrastructure.persistence.jpa.repositories.PlanRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
