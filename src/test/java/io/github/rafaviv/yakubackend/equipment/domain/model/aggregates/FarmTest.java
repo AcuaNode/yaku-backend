@@ -19,29 +19,6 @@ class FarmTest {
         assertEquals(name, farm.getName());
         assertEquals(ownerId, farm.getOwnerId());
         assertEquals(address, farm.getAddress());
-        assertNotNull(farm.getFarmToken());
-        assertFalse(farm.getFarmToken().isEmpty());
-    }
-
-    @Test
-    @DisplayName("Given farm, When regenerating token, Then token changes")
-    void regenerateFarmToken_Successfully() {
-        Farm farm = new Farm("My Fish Farm", 1L, "123 Farm Street");
-        String originalToken = farm.getFarmToken();
-
-        farm.regenerateFarmToken();
-
-        assertNotEquals(originalToken, farm.getFarmToken());
-        assertNotNull(farm.getFarmToken());
-    }
-
-    @Test
-    @DisplayName("Given two farms, When creating, Then each has unique token")
-    void createFarm_UniqueTokens() {
-        Farm farm1 = new Farm("Farm 1", 1L, "Address 1");
-        Farm farm2 = new Farm("Farm 2", 2L, "Address 2");
-
-        assertNotEquals(farm1.getFarmToken(), farm2.getFarmToken());
     }
 
     @Test

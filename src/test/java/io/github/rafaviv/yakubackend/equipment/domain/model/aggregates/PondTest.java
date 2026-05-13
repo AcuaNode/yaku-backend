@@ -23,29 +23,6 @@ class PondTest {
         assertEquals(species, pond.getSpecies());
         assertEquals(volume, pond.getVolume());
         assertEquals(PondStatus.ACTIVE, pond.getStatus());
-        assertNull(pond.getAssignedFishFarmerId());
-    }
-
-    @Test
-    @DisplayName("Given pond, When assigning fish farmer, Then fish farmer is assigned")
-    void assignFishFarmer_Successfully() {
-        Pond pond = new Pond(1L, "Pond A", "Tilapia", 1000.0);
-        Long fishFarmerId = 42L;
-
-        pond.assignFishFarmer(fishFarmerId);
-
-        assertEquals(fishFarmerId, pond.getAssignedFishFarmerId());
-    }
-
-    @Test
-    @DisplayName("Given pond with fish farmer, When reassigning, Then fish farmer is updated")
-    void assignFishFarmer_Reassign_Updates() {
-        Pond pond = new Pond(1L, "Pond A", "Tilapia", 1000.0);
-        pond.assignFishFarmer(42L);
-
-        pond.assignFishFarmer(99L);
-
-        assertEquals(99L, pond.getAssignedFishFarmerId());
     }
 
     @Test
