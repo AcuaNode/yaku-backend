@@ -45,8 +45,9 @@ public class FcmClient implements PushNotificationService {
                     var sendResponse = responsesList.get(i);
                     if (!sendResponse.isSuccessful()) {
                         System.err.println("Token fallido [" + i + "]: " + fcmTokens.get(i));
+                        System.err.println("Causa del fallo: " + sendResponse.getException().getMessage());
                         if (sendResponse.getException() != null) {
-                            System.err.println("Causa del fallo: " + sendResponse.getException().getMessage());
+                            sendResponse.getException().printStackTrace();
                         }
                     }
                 }
