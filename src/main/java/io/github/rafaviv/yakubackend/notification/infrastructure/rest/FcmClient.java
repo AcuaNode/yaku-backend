@@ -37,6 +37,20 @@ public class FcmClient implements PushNotificationService {
             // Enviamos de forma asíncrona a todos los dispositivos registrados
             BatchResponse response = FirebaseMessaging.getInstance().sendEachForMulticast(message);
             System.out.println("Enviadas exitosamente: " + response.getSuccessCount() + " notificaciones. Fallidas: " + response.getFailureCount());
+            
+            // Diagnóstico detallado de fallos
+            if (response.getFailureCount() > 0) {
+                var responsesList = response.getResponses();
+                for (int i = 0; i < responsesList.size(); i++) {
+                    var sendResponse = responsesList.get(i);
+                    if (!sendResponse.isSuccessful()) {
+                        System.err.println("Token fallido [" + i + "]: " + fcmTokens.get(i));
+                        if (sendResponse.getException() != null) {
+                            System.err.println("Causa del fallo: " + sendResponse.getException().getMessage());
+                        }
+                    }
+                }
+            }
         } catch (Exception e) {
             System.err.println("Fallo al enviar notificación multicast a Firebase: " + e.getMessage());
         }
