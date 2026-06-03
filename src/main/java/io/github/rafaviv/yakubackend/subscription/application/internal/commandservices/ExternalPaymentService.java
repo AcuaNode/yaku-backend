@@ -1,4 +1,4 @@
-package io.github.rafaviv.yakubackend.subscription.domain.model.services;
+package io.github.rafaviv.yakubackend.subscription.application.internal.commandservices;
 
 import io.github.rafaviv.yakubackend.subscription.domain.model.valueobjects.Currency;
 import io.github.rafaviv.yakubackend.subscription.domain.model.valueobjects.PaymentStatus;

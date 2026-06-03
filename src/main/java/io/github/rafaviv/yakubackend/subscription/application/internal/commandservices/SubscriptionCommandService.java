@@ -2,7 +2,7 @@ package io.github.rafaviv.yakubackend.subscription.application.internal.commands
 
 import io.github.rafaviv.yakubackend.subscription.domain.model.aggregates.Subscription;
 
-public interface SubscriptionCommandService {
+public interface   SubscriptionCommandService {
     Subscription subscribeUserToPlan(Long userId, Long planId);
 
     void cancelSubscription(Long userId);
