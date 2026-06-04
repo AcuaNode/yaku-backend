@@ -9,4 +9,6 @@ import io.github.rafaviv.yakubackend.subscription.domain.model.valueobjects.Paym
  */
 public interface ExternalPaymentService {
     PaymentStatus processPayment(Long userId, Double amount, Currency currency, String paymentMethodId);
+
+
 }
