@@ -6,6 +6,7 @@ import io.github.rafaviv.yakubackend.subscription.interfaces.rest.resources.Subs
 import io.github.rafaviv.yakubackend.subscription.interfaces.rest.resources.SubscriptionResource;
 import io.github.rafaviv.yakubackend.subscription.interfaces.rest.transform.SubscriptionResourceFromEntityAssembler;
 import io.github.rafaviv.yakubackend.subscription.domain.model.aggregates.Subscription;
+import io.github.rafaviv.yakubackend.subscription.domain.ports.ExternalPaymentGateway;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,11 +15,13 @@ import org.springframework.web.bind.annotation.*;
 public class SubscriptionController {
     private final SubscriptionCommandService subscriptionCommandService;
     private final SubscriptionQueryService subscriptionQueryService;
+    private final ExternalPaymentGateway externalPaymentGateway;
 
     public SubscriptionController(SubscriptionCommandService subscriptionCommandService,
-            SubscriptionQueryService subscriptionQueryService) {
+            SubscriptionQueryService subscriptionQueryService, ExternalPaymentGateway externalPaymentGateway) {
         this.subscriptionCommandService = subscriptionCommandService;
         this.subscriptionQueryService = subscriptionQueryService;
+        this.externalPaymentGateway = externalPaymentGateway;
     }
 
     @GetMapping("/{userId}")
@@ -40,5 +43,18 @@ public class SubscriptionController {
     public ResponseEntity<Void> cancelSubscription(@PathVariable Long userId) {
         subscriptionCommandService.cancelSubscription(userId);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{userId}/checkout")
+    public ResponseEntity<java.util.Map<String, String>> createCheckoutSession(@PathVariable Long userId,
+            @RequestBody SubscribeToPlanResource resource) {
+        return subscriptionQueryService.getPlanById(resource.planId())
+                .map(plan -> {
+                    String checkoutUrl = externalPaymentGateway.createCheckoutSession(userId, plan);
+                    java.util.Map<String, String> response = new java.util.HashMap<>();
+                    response.put("url", checkoutUrl);
+                    return ResponseEntity.ok(response);
+                })
+                .orElse(ResponseEntity.notFound().build());
     }
 }

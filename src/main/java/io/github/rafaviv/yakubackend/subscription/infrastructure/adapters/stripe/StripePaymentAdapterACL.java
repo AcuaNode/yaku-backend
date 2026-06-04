@@ -1,6 +1,6 @@
 package io.github.rafaviv.yakubackend.subscription.infrastructure.adapters.stripe;
 
-import io.github.rafaviv.yakubackend.subscription.application.internal.commandservices.ExternalPaymentService;
+import io.github.rafaviv.yakubackend.subscription.domain.ports.ExternalPaymentService;
 import io.github.rafaviv.yakubackend.subscription.domain.model.valueobjects.Currency;
 import io.github.rafaviv.yakubackend.subscription.domain.model.valueobjects.PaymentStatus;
 

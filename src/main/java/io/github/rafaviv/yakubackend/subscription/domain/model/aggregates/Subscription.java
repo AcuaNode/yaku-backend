@@ -18,10 +18,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Table(name = "subscriptions")
 public class Subscription extends AuditableModel {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @Column(nullable = false)
     private Long userId;
 

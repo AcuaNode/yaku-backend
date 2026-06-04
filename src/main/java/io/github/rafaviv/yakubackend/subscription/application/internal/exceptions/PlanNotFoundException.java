@@ -1,7 +1,7 @@
-﻿package io.github.rafaviv.yakubackend.subscription.application.internal.exceptions;
+package io.github.rafaviv.yakubackend.subscription.application.internal.exceptions;
 
 public class PlanNotFoundException extends RuntimeException {
-  public PlanNotFoundException(String message) {
-    super(message);
-  }
+    public PlanNotFoundException(Long planId) {
+        super("Plan with id " + planId + " not found");
+    }
 }
