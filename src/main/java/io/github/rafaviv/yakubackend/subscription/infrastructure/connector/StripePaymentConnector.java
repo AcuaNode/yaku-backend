@@ -17,10 +17,10 @@ public class StripePaymentConnector implements ExternalPaymentGateway {
     @Value("${stripe.secret.key}")
     private String secretKey;
 
-    @Value("${stripe.success.url:http://localhost:4200/success}")
+    @Value("${stripe.success.url}")
     private String successUrl;
 
-    @Value("${stripe.cancel.url:http://localhost:4200/cancel}")
+    @Value("${stripe.cancel.url}")
     private String cancelUrl;
 
     @PostConstruct
