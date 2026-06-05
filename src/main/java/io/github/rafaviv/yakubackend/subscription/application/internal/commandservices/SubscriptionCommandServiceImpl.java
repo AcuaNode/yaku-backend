@@ -62,6 +62,7 @@ public class SubscriptionCommandServiceImpl implements SubscriptionCommandServic
                 .orElseThrow(() -> new PlanNotFoundException(planId));
 
         subscription.subscribeToPlanWithProvider(plan, externalId, PaymentProvider.STRIPE);
+        subscriptionRepository.save(subscription);
     }
 
     @Override
