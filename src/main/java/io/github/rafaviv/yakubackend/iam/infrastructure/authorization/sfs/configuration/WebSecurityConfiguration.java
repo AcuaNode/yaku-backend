@@ -1,6 +1,5 @@
 package io.github.rafaviv.yakubackend.iam.infrastructure.authorization.sfs.configuration;
 
-
 import io.github.rafaviv.yakubackend.iam.infrastructure.tokens.jwt.BearerTokenService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -40,8 +39,7 @@ public class WebSecurityConfiguration {
             @Qualifier("defaultUserDetailsService") UserDetailsServiceExtension userDetailsService,
             BearerTokenService tokenService,
             BCryptHashingService hashingService,
-            AuthenticationEntryPoint authenticationEntryPoint
-    ) {
+            AuthenticationEntryPoint authenticationEntryPoint) {
         this.userDetailsService = userDetailsService;
         this.tokenService = tokenService;
         this.hashingService = hashingService;
@@ -76,10 +74,10 @@ public class WebSecurityConfiguration {
         http
                 .cors(cors -> cors.configurationSource(request -> {
                     var corsConfig = new CorsConfiguration();
-                    corsConfig.setAllowedOrigins(List.of(
-                            "http://localhost:4200",
-                            "http://localhost:5173",
-                            "https://ashy-ocean-0e996d110.7.azurestaticapps.net"
+                    corsConfig.setAllowedOriginPatterns(List.of(
+                            "http://localhost:*",
+                            "http://127.0.0.1:*",
+                            "https://*.azurestaticapps.net"
                     ));
                     corsConfig.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
                     corsConfig.setAllowedHeaders(List.of("*"));
@@ -100,10 +98,9 @@ public class WebSecurityConfiguration {
                                 "/swagger-ui.html",
                                 "/swagger-ui/**",
                                 "/swagger-resources/**",
-                                "/webjars/**"
-                        ).permitAll()
-                        .anyRequest().authenticated()
-                )
+                                "/webjars/**")
+                        .permitAll()
+                        .anyRequest().authenticated())
                 // 🔑 Autenticación personalizada
                 .authenticationProvider(authenticationProvider())
                 // 🧱 Filtro JWT antes del UsernamePasswordAuthenticationFilter

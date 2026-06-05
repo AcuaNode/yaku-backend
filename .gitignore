@@ -32,3 +32,6 @@ build/
 .env
 ### VS Code ###
 .vscode/
+
+## Firebase ##
+src/main/resources/*.json
