@@ -20,15 +20,51 @@ public class FcmClient implements PushNotificationService {
         }
 
         try {
+            // Construimos un cuerpo de notificación detallado con los datos de telemetría si existen
+            StringBuilder bodyBuilder = new StringBuilder(notification.getMessage());
+            if (notification.getTriggerData() != null) {
+                var trigger = notification.getTriggerData();
+                bodyBuilder.append("\n");
+                if (trigger.temperature() != null) {
+                    bodyBuilder.append("Temperatura: ").append(trigger.temperature()).append("°C | ");
+                }
+                if (trigger.ph() != null) {
+                    bodyBuilder.append("pH: ").append(trigger.ph()).append(" | ");
+                }
+                if (trigger.hardwareStatus() != null) {
+                    bodyBuilder.append("Hardware: ").append(trigger.hardwareStatus());
+                }
+            }
+            String finalBody = bodyBuilder.toString().trim();
+            if (finalBody.endsWith("|")) {
+                finalBody = finalBody.substring(0, finalBody.length() - 2).trim();
+            }
+
             // Construimos la notificación push multicast de Firebase
-            MulticastMessage message = MulticastMessage.builder()
+            var messageBuilder = MulticastMessage.builder()
                     .addAllTokens(fcmTokens)
                     .setNotification(com.google.firebase.messaging.Notification.builder()
                             .setTitle("Alerta de Poza: " + notification.getType())
-                            .setBody(notification.getMessage())
+                            .setBody(finalBody)
                             .build())
                     .putData("notificationId", String.valueOf(notification.getId()))
-                    .putData("type", notification.getType().name())
+                    .putData("type", notification.getType().name());
+
+            // También pasamos los valores como datos estructurados (data payload)
+            if (notification.getTriggerData() != null) {
+                var trigger = notification.getTriggerData();
+                if (trigger.temperature() != null) {
+                    messageBuilder.putData("temperature", String.valueOf(trigger.temperature()));
+                }
+                if (trigger.ph() != null) {
+                    messageBuilder.putData("ph", String.valueOf(trigger.ph()));
+                }
+                if (trigger.hardwareStatus() != null) {
+                    messageBuilder.putData("hardwareStatus", trigger.hardwareStatus());
+                }
+            }
+
+            MulticastMessage message = messageBuilder
                     .setAndroidConfig(AndroidConfig.builder()
                             .setPriority(AndroidConfig.Priority.HIGH)
                             .build())
