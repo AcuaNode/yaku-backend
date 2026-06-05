@@ -1,11 +1,17 @@
 package io.github.rafaviv.yakubackend.subscription.application.internal.commandservices;
 
+import io.github.rafaviv.yakubackend.subscription.application.internal.exceptions.PlanNotFoundException;
+import io.github.rafaviv.yakubackend.subscription.application.internal.exceptions.SubscriptionNotFoundException;
 import io.github.rafaviv.yakubackend.subscription.domain.model.aggregates.Subscription;
+import io.github.rafaviv.yakubackend.subscription.domain.model.entities.Payment;
 import io.github.rafaviv.yakubackend.subscription.domain.model.entities.Plan;
+import io.github.rafaviv.yakubackend.subscription.domain.model.valueobjects.Currency;
+import io.github.rafaviv.yakubackend.subscription.domain.model.valueobjects.PaymentProvider;
+import io.github.rafaviv.yakubackend.subscription.domain.model.valueobjects.PaymentStatus;
 import io.github.rafaviv.yakubackend.subscription.domain.model.valueobjects.SubscriptionPeriod;
-import io.github.rafaviv.yakubackend.telemetry.infrastructure.configuration.infrastructure.persistence.jpa.repositories.PlanRepository;
-import io.github.rafaviv.yakubackend.telemetry.infrastructure.configuration.infrastructure.persistence.jpa.repositories.PaymentRepository;
-import io.github.rafaviv.yakubackend.telemetry.infrastructure.configuration.infrastructure.persistence.jpa.repositories.SubscriptionRepository;
+import io.github.rafaviv.yakubackend.subscription.infrastructure.persistence.jpa.repositories.PlanRepository;
+import io.github.rafaviv.yakubackend.subscription.infrastructure.persistence.jpa.repositories.PaymentRepository;
+import io.github.rafaviv.yakubackend.subscription.infrastructure.persistence.jpa.repositories.SubscriptionRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,6 +53,20 @@ public class SubscriptionCommandServiceImpl implements SubscriptionCommandServic
 
     @Override
     @Transactional
+    public void subscribeUserToPlanWithStripe(Long userId, Long planId, String externalId) {
+
+        Subscription subscription = subscriptionRepository.findByUserId(userId)
+                .orElseThrow(() -> new SubscriptionNotFoundException(userId));
+
+        Plan plan = planRepository.findById(planId)
+                .orElseThrow(() -> new PlanNotFoundException(planId));
+
+        subscription.subscribeToPlanWithProvider(plan, externalId, PaymentProvider.STRIPE);
+        subscriptionRepository.save(subscription);
+    }
+
+    @Override
+    @Transactional
     public void cancelSubscription(Long userId) {
         subscriptionRepository.findByUserId(userId)
                 .ifPresent(subscription -> {
@@ -59,12 +79,12 @@ public class SubscriptionCommandServiceImpl implements SubscriptionCommandServic
     @Transactional
     public void processPaymentCallback(Long userId, String transactionReference, boolean success) {
         // Simple implementation to record payment
-        io.github.rafaviv.yakubackend.subscription.domain.model.entities.Payment payment = new io.github.rafaviv.yakubackend.subscription.domain.model.entities.Payment(
+        Payment payment = new Payment(
                 userId,
                 0.0, // Should be dynamic
-                io.github.rafaviv.yakubackend.subscription.domain.model.valueobjects.Currency.USD,
-                success ? io.github.rafaviv.yakubackend.subscription.domain.model.valueobjects.PaymentStatus.SUCCESS
-                        : io.github.rafaviv.yakubackend.subscription.domain.model.valueobjects.PaymentStatus.FAILED,
+                Currency.USD,
+                success ? PaymentStatus.SUCCESS
+                        : PaymentStatus.FAILED,
                 transactionReference);
         paymentRepository.save(payment);
     }

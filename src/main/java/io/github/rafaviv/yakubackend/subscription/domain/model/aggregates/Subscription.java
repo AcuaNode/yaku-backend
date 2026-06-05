@@ -2,6 +2,7 @@ package io.github.rafaviv.yakubackend.subscription.domain.model.aggregates;
 
 import io.github.rafaviv.yakubackend.shared.domain.model.entities.AuditableModel;
 import io.github.rafaviv.yakubackend.subscription.domain.model.entities.Plan;
+import io.github.rafaviv.yakubackend.subscription.domain.model.valueobjects.PaymentProvider;
 import io.github.rafaviv.yakubackend.subscription.domain.model.valueobjects.SubscriptionPeriod;
 import io.github.rafaviv.yakubackend.subscription.domain.model.valueobjects.SubscriptionStatus;
 import jakarta.persistence.*;
@@ -17,10 +18,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Table(name = "subscriptions")
 public class Subscription extends AuditableModel {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @Column(nullable = false)
     private Long userId;
 
@@ -35,7 +32,13 @@ public class Subscription extends AuditableModel {
     @Column(nullable = false)
     private SubscriptionStatus status;
 
-    // Constructor existente
+    @Column(name = "external_id")
+    private String externalId;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "provider")
+    private PaymentProvider provider;
+
     public Subscription(Long userId, Plan plan, SubscriptionPeriod period) {
         this.userId = userId;
         this.plan = plan;
@@ -43,27 +46,28 @@ public class Subscription extends AuditableModel {
         this.status = SubscriptionStatus.ACTIVE;
     }
 
-    /**
-     * NUEVO: Constructor para el Test y para nuevos registros
-     * Permite crear una suscripción base que luego será activada con un plan.
-     */
     public Subscription(Long userId) {
         this.userId = userId;
         this.status = SubscriptionStatus.CANCELLED;
     }
 
     /**
-     * NUEVO: Lógica de Negocio Encapsulada (Patrón: Tell, Don't Ask)
+     * Lógica de Negocio Encapsulada (Patrón: Tell, Don't Ask)
      * La entidad es responsable de calcular su propio periodo basándose en el plan.
      */
     public void subscribeToPlan(Plan plan) {
         this.plan = plan;
         this.status = SubscriptionStatus.ACTIVE;
-        // Calculamos el periodo internamente usando la duración del plan
+
         this.period = new SubscriptionPeriod(
                 LocalDate.now(),
-                LocalDate.now().plusDays(plan.getDurationInDays())
-        );
+                LocalDate.now().plusDays(plan.getDurationInDays()));
+    }
+
+    public void subscribeToPlanWithProvider(Plan plan, String externalId, PaymentProvider provider) {
+        this.subscribeToPlan(plan);
+        this.externalId = externalId;
+        this.provider = provider;
     }
 
     public void cancel() {

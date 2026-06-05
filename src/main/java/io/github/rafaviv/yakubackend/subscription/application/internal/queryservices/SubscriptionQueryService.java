@@ -10,4 +10,5 @@ public interface SubscriptionQueryService {
     Optional<Subscription> getUserSubscriptionStatus(Long userId);
 
     List<Plan> getAvailablePlans();
+    Optional<Plan> getPlanById(Long planId);
 }

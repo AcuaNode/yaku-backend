@@ -2,8 +2,8 @@ package io.github.rafaviv.yakubackend.subscription.application.internal.queryser
 
 import io.github.rafaviv.yakubackend.subscription.domain.model.aggregates.Subscription;
 import io.github.rafaviv.yakubackend.subscription.domain.model.entities.Plan;
-import io.github.rafaviv.yakubackend.telemetry.infrastructure.configuration.infrastructure.persistence.jpa.repositories.PlanRepository;
-import io.github.rafaviv.yakubackend.telemetry.infrastructure.configuration.infrastructure.persistence.jpa.repositories.SubscriptionRepository;
+import io.github.rafaviv.yakubackend.subscription.infrastructure.persistence.jpa.repositories.PlanRepository;
+import io.github.rafaviv.yakubackend.subscription.infrastructure.persistence.jpa.repositories.SubscriptionRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +19,7 @@ public class SubscriptionQueryServiceImpl implements SubscriptionQueryService {
         this.planRepository = planRepository;
     }
 
+
     @Override
     public Optional<Subscription> getUserSubscriptionStatus(Long userId) {
         return subscriptionRepository.findByUserId(userId);
@@ -27,5 +28,10 @@ public class SubscriptionQueryServiceImpl implements SubscriptionQueryService {
     @Override
     public List<Plan> getAvailablePlans() {
         return planRepository.findAll();
+    }
+
+    @Override
+    public Optional<Plan> getPlanById(Long planId) {
+        return planRepository.findById(planId);
     }
 }

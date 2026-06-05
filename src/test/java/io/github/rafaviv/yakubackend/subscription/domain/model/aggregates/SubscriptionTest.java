@@ -18,7 +18,7 @@
         void subscribeToPlan_Successfully() {
             // Arrange
             Long userId = 1L;
-            Plan premiumPlan = new Plan("PREMIUM", 19.99, Currency.USD, 10, 30); // 30 days duration
+            Plan premiumPlan = new Plan("PREMIUM", 19.99, Currency.USD, 10, 30, null); // 30 days duration
             Subscription subscription = new Subscription(userId); // Initial status is CANCELLED
 
             // Act
@@ -39,7 +39,7 @@
         void cancelSubscription_Successfully() {
             // Arrange
             Subscription subscription = new Subscription(1L);
-            subscription.subscribeToPlan(new Plan("FREE", 0.0, Currency.USD, 1, 365));
+            subscription.subscribeToPlan(new Plan("FREE", 0.0, Currency.USD, 1, 365, null));
 
             // Act
             subscription.cancel();
@@ -52,7 +52,7 @@
         @DisplayName("Given a subscription, When expired, Then status becomes EXPIRED")
         void expireSubscription_Successfully() {
             Subscription subscription = new Subscription(1L);
-            subscription.subscribeToPlan(new Plan("BASIC", 9.99, Currency.USD, 5, 30));
+            subscription.subscribeToPlan(new Plan("BASIC", 9.99, Currency.USD, 5, 30, null));
 
             subscription.expire();
 
@@ -73,7 +73,7 @@
         @Test
         @DisplayName("Given full data, When creating subscription with full constructor, Then all fields are set")
         void createSubscription_FullConstructor_AllFieldsSet() {
-            Plan plan = new Plan("ENTERPRISE", 99.99, Currency.USD, 100, 365);
+            Plan plan = new Plan("ENTERPRISE", 99.99, Currency.USD, 100, 365, null);
             SubscriptionPeriod period = new SubscriptionPeriod(LocalDate.now(), LocalDate.now().plusDays(365));
 
             Subscription subscription = new Subscription(1L, plan, period);
@@ -90,7 +90,7 @@
             Subscription subscription = new Subscription(1L);
             assertEquals(SubscriptionStatus.CANCELLED, subscription.getStatus());
 
-            Plan plan = new Plan("STARTER", 4.99, Currency.USD, 3, 14);
+            Plan plan = new Plan("STARTER", 4.99, Currency.USD, 3, 14, null);
             subscription.subscribeToPlan(plan);
 
             assertEquals(SubscriptionStatus.ACTIVE, subscription.getStatus());
@@ -100,10 +100,10 @@
         @DisplayName("Given subscription, When subscribing to different plan, Then plan is updated")
         void subscribeToPlan_ChangePlan_PlanUpdated() {
             Subscription subscription = new Subscription(1L);
-            Plan basicPlan = new Plan("BASIC", 9.99, Currency.USD, 5, 30);
+            Plan basicPlan = new Plan("BASIC", 9.99, Currency.USD, 5, 30, null);
             subscription.subscribeToPlan(basicPlan);
 
-            Plan premiumPlan = new Plan("PREMIUM", 19.99, Currency.USD, 10, 30);
+            Plan premiumPlan = new Plan("PREMIUM", 19.99, Currency.USD, 10, 30, null);
             subscription.subscribeToPlan(premiumPlan);
 
             assertEquals(premiumPlan, subscription.getPlan());
