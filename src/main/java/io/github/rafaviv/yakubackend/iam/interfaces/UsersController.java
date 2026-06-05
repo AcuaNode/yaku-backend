@@ -26,9 +26,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Optional;
+
+// Importaciones de Swagger
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 /**
  * Users REST Controller
@@ -39,6 +42,7 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api/v1/users")
+@Tag(name = "Authentication", description = "Endpoints para registro y login de usuarios")
 public class UsersController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UsersController.class);
@@ -56,18 +60,7 @@ public class UsersController {
         this.roleValidationService = roleValidationService;
     }
 
-    /**
-     * Register a new user
-     * 
-     * @param signUpResource the user registration data
-     * @return ResponseEntity with success message
-     */
-    /**
-     * Register a new user
-     * 
-     * @param signUpResource the user registration data
-     * @return ResponseEntity with success message
-     */
+    @Operation(summary = "Registrar un nuevo usuario")
     @PostMapping("/signup")
     public ResponseEntity<String> signUp(@Valid @RequestBody SignUpResource signUpResource) {
         try {
@@ -96,12 +89,7 @@ public class UsersController {
         }
     }
 
-    /**
-     * Authenticate a user and return JWT token
-     * 
-     * @param signInResource the user authentication data
-     * @return ResponseEntity with JWT token and user information
-     */
+    @Operation(summary = "Iniciar sesión y obtener Token")
     @PostMapping("/signin")
     public ResponseEntity<?> signIn(@Valid @RequestBody SignInResource signInResource) {
         try {
@@ -148,12 +136,7 @@ public class UsersController {
         }
     }
 
-    /**
-     * Get user by username
-     * 
-     * @param username the user username
-     * @return ResponseEntity with user information
-     */
+    @Operation(summary = "Obtener usuario por nombre de usuario")
     @GetMapping("/by-username")
     public ResponseEntity<?> getUserByUsername(@RequestParam String username) {
         try {
@@ -181,12 +164,7 @@ public class UsersController {
         }
     }
 
-    /**
-     * Get all users
-     * 
-     * @param farmId optional farm ID to filter users
-     * @return ResponseEntity with list of all users
-     */
+    @Operation(summary = "Obtener todos los usuarios")
     @GetMapping
     public ResponseEntity<?> getAllUsers(@RequestParam(required = false) Long farmId) {
         try {
@@ -212,9 +190,7 @@ public class UsersController {
         }
     }
 
-    /**
-     * Change user password
-     */
+    @Operation(summary = "Cambiar contraseña de usuario")
     @PatchMapping("/{id}/password")
     public ResponseEntity<?> changePassword(@PathVariable Long id, @RequestBody ChangePasswordResource resource) {
         try {
@@ -229,11 +205,7 @@ public class UsersController {
         }
     }
 
-    /**
-     * Get available roles for registration
-     *
-     * @return ResponseEntity with list of available roles
-     */
+    @Operation(summary = "Obtener roles disponibles")
     @GetMapping("/available-roles")
     public ResponseEntity<?> getAvailableRoles() {
         try {

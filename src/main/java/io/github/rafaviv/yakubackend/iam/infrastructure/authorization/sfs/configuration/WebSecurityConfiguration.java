@@ -1,6 +1,5 @@
 package io.github.rafaviv.yakubackend.iam.infrastructure.authorization.sfs.configuration;
 
-
 import io.github.rafaviv.yakubackend.iam.infrastructure.tokens.jwt.BearerTokenService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -99,7 +98,8 @@ public class WebSecurityConfiguration {
                                 "/swagger-ui.html",
                                 "/swagger-ui/**",
                                 "/swagger-resources/**",
-                                "/webjars/**"
+                                "/webjars/**",
+                                "/error" // <--- ¡AQUÍ ESTÁ LA MAGIA!
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

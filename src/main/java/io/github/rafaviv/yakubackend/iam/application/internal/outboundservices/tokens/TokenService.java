@@ -29,7 +29,6 @@ public interface TokenService {
      * @return Long the workshop ID
      */
     Long getWorkshopIdFromToken(String token);
-
     /**
      * Validate a token
      * @param token the token
