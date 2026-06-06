@@ -10,6 +10,7 @@ import io.github.rafaviv.yakubackend.iam.domain.model.exceptions.UserAccountDeac
 import io.github.rafaviv.yakubackend.iam.domain.model.exceptions.UserAlreadyExistsException;
 import io.github.rafaviv.yakubackend.iam.domain.model.exceptions.UserNotFoundException;
 import io.github.rafaviv.yakubackend.iam.domain.model.queries.GetAllUsersQuery;
+import io.github.rafaviv.yakubackend.iam.domain.model.queries.GetUserByIdQuery;
 import io.github.rafaviv.yakubackend.iam.domain.model.queries.GetUserByUsernameQuery;
 import io.github.rafaviv.yakubackend.iam.domain.services.RoleValidationService;
 import io.github.rafaviv.yakubackend.iam.interfaces.rest.resources.AuthenticationResponseResource;
@@ -176,6 +177,36 @@ public class UsersController {
                     .body(e.getMessage());
         } catch (Exception e) {
             LOGGER.error("Unexpected error retrieving user by username {}: {}", username, e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An unexpected error occurred while retrieving user");
+        }
+    }
+
+    /**
+     * Get user by ID
+     * 
+     * @param id the user ID
+     * @return ResponseEntity with user information
+     */
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getUserById(@PathVariable Long id) {
+        try {
+            LOGGER.debug("Processing getUserById request for ID: {}", id);
+
+            Optional<User> userOptional = userQueryService.handle(new GetUserByIdQuery(id));
+
+            if (userOptional.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("User not found with id: " + id);
+            }
+
+            User user = userOptional.get();
+            UserResource userResource = UserResourceFromEntityAssembler.toResourceFromEntity(user);
+
+            return ResponseEntity.ok(userResource);
+
+        } catch (Exception e) {
+            LOGGER.error("Unexpected error retrieving user by id {}: {}", id, e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("An unexpected error occurred while retrieving user");
         }

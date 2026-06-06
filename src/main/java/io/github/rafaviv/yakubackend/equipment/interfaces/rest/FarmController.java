@@ -1,6 +1,7 @@
 package io.github.rafaviv.yakubackend.equipment.interfaces.rest;
 
 import io.github.rafaviv.yakubackend.equipment.domain.model.commands.CreateFarmCommand;
+import io.github.rafaviv.yakubackend.equipment.domain.model.queries.GetFarmByIdQuery;
 import io.github.rafaviv.yakubackend.equipment.domain.model.queries.GetFarmsByOwnerIdQuery;
 import io.github.rafaviv.yakubackend.equipment.domain.services.FarmCommandService;
 import io.github.rafaviv.yakubackend.equipment.domain.services.FarmQueryService;
@@ -12,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -69,6 +71,22 @@ public class FarmController {
                 .map(farm -> new FarmResource(farm.getId(), farm.getName(), farm.getOwnerId(), farm.getAddress(), farm.getFarmToken()))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(resources);
+    }
+
+    @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<FarmResource> getFarmById(@PathVariable Long id) {
+        var query = new GetFarmByIdQuery(id);
+        var farm = farmQueryService.handle(query);
+        
+        if (farm.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        
+        var foundFarm = farm.get();
+        var farmResource = new FarmResource(foundFarm.getId(), foundFarm.getName(), foundFarm.getOwnerId(), foundFarm.getAddress(), foundFarm.getFarmToken());
+        
+        return ResponseEntity.ok(farmResource);
     }
 
     @PatchMapping("/{id}/token")

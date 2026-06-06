@@ -26,8 +26,8 @@ public class EquipmentCommandServiceImpl implements EquipmentCommandService {
     }
 
     @Override
-    public Optional<Equipment> registerEquipment(EquipmentType type, String name, String physicalCode) {
-        Equipment equipment = new Equipment(type, name, physicalCode);
+    public Optional<Equipment> registerEquipment(EquipmentType type, String name, String physicalCode, Long farmId) {
+        Equipment equipment = new Equipment(type, name, physicalCode, farmId);
         Equipment savedEquipment = equipmentRepository.save(equipment);
         
         try {

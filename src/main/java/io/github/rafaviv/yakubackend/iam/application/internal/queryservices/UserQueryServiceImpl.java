@@ -2,6 +2,7 @@ package io.github.rafaviv.yakubackend.iam.application.internal.queryservices;
 
 import io.github.rafaviv.yakubackend.iam.domain.model.aggregates.User;
 import io.github.rafaviv.yakubackend.iam.domain.model.queries.GetAllUsersQuery;
+import io.github.rafaviv.yakubackend.iam.domain.model.queries.GetUserByIdQuery;
 import io.github.rafaviv.yakubackend.iam.domain.model.queries.GetUserByUsernameQuery;
 import io.github.rafaviv.yakubackend.iam.domain.services.UserQueryService;
 import io.github.rafaviv.yakubackend.iam.infrastructure.persistence.jpa.repositories.RoleRepository;
@@ -46,6 +47,21 @@ public class UserQueryServiceImpl implements UserQueryService {
             LOGGER.debug("User found with ID: {}", user.get().getId());
         } else {
             LOGGER.debug("No user found with username: {}", query.username());
+        }
+        
+        return user;
+    }
+
+    @Override
+    public Optional<User> handle(GetUserByIdQuery query) {
+        LOGGER.debug("Processing GetUserByIdQuery for ID: {}", query.id());
+        
+        Optional<User> user = userRepository.findById(query.id());
+        
+        if (user.isPresent()) {
+            LOGGER.debug("User found with ID: {}", user.get().getId());
+        } else {
+            LOGGER.debug("No user found with ID: {}", query.id());
         }
         
         return user;

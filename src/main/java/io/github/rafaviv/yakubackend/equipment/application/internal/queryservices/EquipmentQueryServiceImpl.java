@@ -5,7 +5,11 @@ import io.github.rafaviv.yakubackend.equipment.domain.services.EquipmentQuerySer
 import io.github.rafaviv.yakubackend.equipment.infrastructure.persistence.jpa.repositories.EquipmentRepository;
 import org.springframework.stereotype.Service;
 
+import io.github.rafaviv.yakubackend.equipment.domain.model.queries.GetEquipmentByIdQuery;
+import io.github.rafaviv.yakubackend.equipment.domain.model.queries.GetEquipmentByFarmIdQuery;
+
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EquipmentQueryServiceImpl implements EquipmentQueryService {
@@ -19,5 +23,15 @@ public class EquipmentQueryServiceImpl implements EquipmentQueryService {
     @Override
     public List<Equipment> getAllEquipment() {
         return equipmentRepository.findAll();
+    }
+
+    @Override
+    public Optional<Equipment> handle(GetEquipmentByIdQuery query) {
+        return equipmentRepository.findById(query.id());
+    }
+
+    @Override
+    public List<Equipment> handle(GetEquipmentByFarmIdQuery query) {
+        return equipmentRepository.findByFarmId(query.farmId());
     }
 }
