@@ -11,7 +11,8 @@ public class PondResourceFromEntityAssembler {
                 entity.getName(),
                 entity.getSpecies(),
                 entity.getVolume(),
-                entity.getStatus().name()
+                entity.getStatus().name(),
+                entity.getAssignedOperatorId()
         );
     }
 }

@@ -8,4 +8,6 @@ public interface PondCommandService {
     Optional<Pond> createPond(Long farmId, String name, String species, Double volume);
     void deletePond(Long pondId);
     Optional<Pond> updatePond(Long pondId, String name, String species, Double volume);
+    Optional<Pond> assignOperator(Long pondId, Long operatorId);
+    Optional<Pond> deassignOperator(Long pondId);
 }

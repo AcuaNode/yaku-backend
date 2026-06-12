@@ -10,4 +10,5 @@ import java.util.Optional;
 @Repository
 public interface PondRepository extends JpaRepository<Pond, Long> {
     List<Pond> findByFarmId(Long farmId);
+    List<Pond> findByAssignedOperatorId(Long assignedOperatorId);
 }

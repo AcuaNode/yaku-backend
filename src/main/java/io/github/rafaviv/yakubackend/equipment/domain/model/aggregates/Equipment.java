@@ -17,7 +17,6 @@ public class Equipment extends AuditableAbstractAggregateRoot<Equipment> {
 
     private Long pondId;
 
-    @Column(nullable = false)
     private Long farmId;
 
     @Enumerated(EnumType.STRING)

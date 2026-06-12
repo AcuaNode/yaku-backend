@@ -29,6 +29,9 @@ public class Pond extends AuditableAbstractAggregateRoot<Pond> {
     @Column(nullable = false)
     private PondStatus status;
 
+    @Column
+    private Long assignedOperatorId;
+
     public Pond() {
         // JPA requires a default constructor
     }
@@ -49,5 +52,13 @@ public class Pond extends AuditableAbstractAggregateRoot<Pond> {
         if (name != null && !name.isBlank()) this.name = name;
         if (species != null) this.species = species;
         if (volume != null && volume > 0) this.volume = volume;
+    }
+
+    public void assignOperator(Long operatorId) {
+        this.assignedOperatorId = operatorId;
+    }
+
+    public void deassignOperator() {
+        this.assignedOperatorId = null;
     }
 }

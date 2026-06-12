@@ -37,4 +37,20 @@ public class PondCommandServiceImpl implements PondCommandService {
             return pondRepository.save(pond);
         });
     }
+
+    @Override
+    public Optional<Pond> assignOperator(Long pondId, Long operatorId) {
+        return pondRepository.findById(pondId).map(pond -> {
+            pond.assignOperator(operatorId);
+            return pondRepository.save(pond);
+        });
+    }
+
+    @Override
+    public Optional<Pond> deassignOperator(Long pondId) {
+        return pondRepository.findById(pondId).map(pond -> {
+            pond.deassignOperator();
+            return pondRepository.save(pond);
+        });
+    }
 }

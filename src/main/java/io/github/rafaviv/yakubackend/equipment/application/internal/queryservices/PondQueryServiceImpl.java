@@ -4,6 +4,7 @@ import io.github.rafaviv.yakubackend.equipment.domain.model.aggregates.Pond;
 import io.github.rafaviv.yakubackend.equipment.domain.model.queries.GetAllPondsQuery;
 import io.github.rafaviv.yakubackend.equipment.domain.model.queries.GetPondByIdQuery;
 import io.github.rafaviv.yakubackend.equipment.domain.model.queries.GetPondsByFarmIdQuery;
+import io.github.rafaviv.yakubackend.equipment.domain.model.queries.GetPondsByAssignedOperatorIdQuery;
 import io.github.rafaviv.yakubackend.equipment.domain.services.PondQueryService;
 import io.github.rafaviv.yakubackend.equipment.infrastructure.persistence.jpa.repositories.PondRepository;
 import org.springframework.stereotype.Service;
@@ -33,5 +34,10 @@ public class PondQueryServiceImpl implements PondQueryService {
     @Override
     public List<Pond> handle(GetPondsByFarmIdQuery query) {
         return pondRepository.findByFarmId(query.farmId());
+    }
+
+    @Override
+    public List<Pond> handle(GetPondsByAssignedOperatorIdQuery query) {
+        return pondRepository.findByAssignedOperatorId(query.operatorId());
     }
 }

@@ -29,9 +29,11 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
+.yakucontrol
 .env
 ### VS Code ###
 .vscode/
 
 ## Firebase ##
 src/main/resources/*.json
+
