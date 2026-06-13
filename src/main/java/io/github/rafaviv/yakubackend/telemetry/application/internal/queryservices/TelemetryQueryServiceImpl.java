@@ -16,11 +16,14 @@ public class TelemetryQueryServiceImpl implements TelemetryQueryService {
 
     private final SensorReadingRepository sensorReadingRepository;
     private final MeasurementAggregateRepository measurementAggregateRepository;
+    private final io.github.rafaviv.yakubackend.telemetry.infrastructure.persistence.jpa.repositories.ThresholdRepository thresholdRepository;
 
     public TelemetryQueryServiceImpl(SensorReadingRepository sensorReadingRepository,
-                                     MeasurementAggregateRepository measurementAggregateRepository) {
+                                     MeasurementAggregateRepository measurementAggregateRepository,
+                                     io.github.rafaviv.yakubackend.telemetry.infrastructure.persistence.jpa.repositories.ThresholdRepository thresholdRepository) {
         this.sensorReadingRepository = sensorReadingRepository;
         this.measurementAggregateRepository = measurementAggregateRepository;
+        this.thresholdRepository = thresholdRepository;
     }
 
     @Override
@@ -37,5 +40,10 @@ public class TelemetryQueryServiceImpl implements TelemetryQueryService {
             case YEARLY -> LocalDateTime.now().minusYears(1);
         };
         return measurementAggregateRepository.findByPondIdAndPeriodStartGreaterThanEqual(query.pondId(), start);
+    }
+
+    @Override
+    public java.util.Optional<io.github.rafaviv.yakubackend.telemetry.domain.model.aggregates.Threshold> handle(io.github.rafaviv.yakubackend.telemetry.domain.model.queries.GetThresholdBySpeciesQuery query) {
+        return thresholdRepository.findBySpecies(query.species());
     }
 }
