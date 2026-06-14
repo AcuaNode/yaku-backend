@@ -13,4 +13,21 @@ public interface ExternalEquipmentService {
      * @return The species name as a plain string (e.g., "TRUCHA", "TILAPIA")
      */
     String getSpeciesByPondId(Long pondId);
+
+    /**
+     * Retrieves the user ID of the owner of a specific pond.
+     *
+     * @param pondId The identifier of the pond
+     * @return The user ID of the owner
+     */
+    Long getUserIdByPondId(Long pondId);
+
+    /**
+     * Retrieves the operator ID assigned to a specific pond.
+     * If no operator is assigned, it falls back to the owner ID.
+     *
+     * @param pondId The identifier of the pond
+     * @return The user ID of the operator or owner
+     */
+    Long getOperatorIdByPondId(Long pondId);
 }

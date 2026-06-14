@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import io.github.rafaviv.yakubackend.notification.domain.models.valueobjects.NotificationType;
+import io.github.rafaviv.yakubackend.notification.domain.models.valueobjects.SensorType;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -27,10 +28,11 @@ public class NotificationEntity {
     @Column(nullable = false)
     private Long recipientUserId;
 
-    private String recipientRole;
+    private BigDecimal triggerValue;
 
-    private BigDecimal triggerTemperature;
-    private BigDecimal triggerPh;
+    @Enumerated(EnumType.STRING)
+    private SensorType triggerSensorType;
+
     private String triggerHardwareStatus;
 
     @Column(nullable = false)

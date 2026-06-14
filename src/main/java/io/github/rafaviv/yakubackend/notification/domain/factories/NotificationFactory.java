@@ -3,6 +3,7 @@ package io.github.rafaviv.yakubackend.notification.domain.factories;
 import io.github.rafaviv.yakubackend.notification.domain.models.aggregates.Notification;
 import io.github.rafaviv.yakubackend.notification.domain.models.valueobjects.NotificationType;
 import io.github.rafaviv.yakubackend.notification.domain.models.valueobjects.RecipientInfo;
+import io.github.rafaviv.yakubackend.notification.domain.models.valueobjects.SensorType;
 import io.github.rafaviv.yakubackend.notification.domain.models.valueobjects.TriggerSnapshot;
 
 import java.math.BigDecimal;
@@ -15,12 +16,12 @@ import java.math.BigDecimal;
 public class NotificationFactory {
 
     public static Notification createCriticalTelemetryAlert(
-            Long userId, String message, Double currentPh, Double currentTemp) {
+            Long userId, String message, Double currentValue, SensorType sensorType) {
 
-        RecipientInfo recipient = new RecipientInfo(userId, "OWNER");
+        RecipientInfo recipient = new RecipientInfo(userId);
         TriggerSnapshot snapshot = new TriggerSnapshot(
-                BigDecimal.valueOf(currentTemp),
-                BigDecimal.valueOf(currentPh),
+                BigDecimal.valueOf(currentValue),
+                sensorType,
                 "CRITICAL_STATE"
         );
 

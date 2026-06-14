@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import io.github.rafaviv.yakubackend.notification.domain.models.aggregates.Notification;
 import io.github.rafaviv.yakubackend.notification.domain.models.valueobjects.RecipientInfo;
 import io.github.rafaviv.yakubackend.notification.domain.models.valueobjects.TriggerSnapshot;
+import io.github.rafaviv.yakubackend.notification.domain.models.valueobjects.SensorType;
 import io.github.rafaviv.yakubackend.notification.domain.services.NotificationRepository;
 import io.github.rafaviv.yakubackend.notification.domain.services.PushNotificationService;
 import io.github.rafaviv.yakubackend.notification.domain.services.DeviceTokenRepository;
@@ -28,8 +29,8 @@ public class SendNotificationCommandService {
     }
 
     public void handle(SendNotificationCommand command) {
-        RecipientInfo recipient = new RecipientInfo(command.userId(), command.role());
-        TriggerSnapshot triggerData = new TriggerSnapshot(command.temperature(), command.ph(), command.hardwareStatus());
+        RecipientInfo recipient = new RecipientInfo(command.userId());
+        TriggerSnapshot triggerData = new TriggerSnapshot(command.value(), command.sensorType() != null ? SensorType.valueOf(command.sensorType()) : null, command.hardwareStatus());
         
         Notification notification = new Notification(command.type(), command.message(), recipient, triggerData);
         

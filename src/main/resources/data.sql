@@ -37,8 +37,8 @@ SELECT 1, 'PH', 6.5, 8.5
 WHERE NOT EXISTS (SELECT 1 FROM threshold_configs WHERE pond_id = 1 AND sensor_type = 'PH');
 
 INSERT INTO threshold_configs (pond_id, sensor_type, min_allowed, max_allowed)
-SELECT 1, 'OXYGEN', 5.0, 10.0
-WHERE NOT EXISTS (SELECT 1 FROM threshold_configs WHERE pond_id = 1 AND sensor_type = 'OXYGEN');
+SELECT 1, 'TURBIDITY', 5.0, 10.0
+WHERE NOT EXISTS (SELECT 1 FROM threshold_configs WHERE pond_id = 1 AND sensor_type = 'TURBIDITY');
 
 -- Seed Sensor Readings for Pond 1 (Past 24 hours)
 INSERT INTO sensor_readings (pond_id, sensor_type, value, unit, timestamp)
@@ -56,11 +56,11 @@ INSERT INTO sensor_readings (pond_id, sensor_type, value, unit, timestamp)
 VALUES (1, 'PH', 7.1, 'pH', CURRENT_TIMESTAMP - INTERVAL '1 hour');
 
 INSERT INTO sensor_readings (pond_id, sensor_type, value, unit, timestamp)
-VALUES (1, 'OXYGEN', 6.5, 'mg/L', CURRENT_TIMESTAMP - INTERVAL '24 hours');
+VALUES (1, 'TURBIDITY', 6.5, 'NTU', CURRENT_TIMESTAMP - INTERVAL '24 hours');
 INSERT INTO sensor_readings (pond_id, sensor_type, value, unit, timestamp)
-VALUES (1, 'OXYGEN', 6.8, 'mg/L', CURRENT_TIMESTAMP - INTERVAL '12 hours');
+VALUES (1, 'TURBIDITY', 6.8, 'NTU', CURRENT_TIMESTAMP - INTERVAL '12 hours');
 INSERT INTO sensor_readings (pond_id, sensor_type, value, unit, timestamp)
-VALUES (1, 'OXYGEN', 6.7, 'mg/L', CURRENT_TIMESTAMP - INTERVAL '1 hour');
+VALUES (1, 'TURBIDITY', 6.7, 'NTU', CURRENT_TIMESTAMP - INTERVAL '1 hour');
 
 -- Seed Measurement Aggregates for Pond 1
 INSERT INTO measurement_aggregates (pond_id, sensor_type, min_value, max_value, average_value, period_start, period_end)
@@ -68,4 +68,4 @@ VALUES (1, 'TEMPERATURE', 24.0, 27.0, 25.5, CURRENT_TIMESTAMP - INTERVAL '2 days
 INSERT INTO measurement_aggregates (pond_id, sensor_type, min_value, max_value, average_value, period_start, period_end)
 VALUES (1, 'PH', 6.8, 7.4, 7.1, CURRENT_TIMESTAMP - INTERVAL '2 days', CURRENT_TIMESTAMP - INTERVAL '1 day');
 INSERT INTO measurement_aggregates (pond_id, sensor_type, min_value, max_value, average_value, period_start, period_end)
-VALUES (1, 'OXYGEN', 6.0, 7.5, 6.7, CURRENT_TIMESTAMP - INTERVAL '2 days', CURRENT_TIMESTAMP - INTERVAL '1 day');
+VALUES (1, 'TURBIDITY', 6.0, 7.5, 6.7, CURRENT_TIMESTAMP - INTERVAL '2 days', CURRENT_TIMESTAMP - INTERVAL '1 day');

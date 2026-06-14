@@ -7,8 +7,7 @@ public record SendNotificationCommand(
     NotificationType type,
     String message,
     Long userId,
-    String role,
-    BigDecimal temperature,
-    BigDecimal ph,
+    BigDecimal value,
+    String sensorType,
     String hardwareStatus
 ) {}

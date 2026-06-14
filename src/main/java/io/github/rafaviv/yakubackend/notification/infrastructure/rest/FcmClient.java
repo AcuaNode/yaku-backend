@@ -25,11 +25,8 @@ public class FcmClient implements PushNotificationService {
             if (notification.getTriggerData() != null) {
                 var trigger = notification.getTriggerData();
                 bodyBuilder.append("\n");
-                if (trigger.temperature() != null) {
-                    bodyBuilder.append("Temperatura: ").append(trigger.temperature()).append("°C | ");
-                }
-                if (trigger.ph() != null) {
-                    bodyBuilder.append("pH: ").append(trigger.ph()).append(" | ");
+                if (trigger.value() != null && trigger.sensorType() != null) {
+                    bodyBuilder.append(trigger.sensorType().name()).append(": ").append(trigger.value()).append(" | ");
                 }
                 if (trigger.hardwareStatus() != null) {
                     bodyBuilder.append("Hardware: ").append(trigger.hardwareStatus());
@@ -53,11 +50,11 @@ public class FcmClient implements PushNotificationService {
             // También pasamos los valores como datos estructurados (data payload)
             if (notification.getTriggerData() != null) {
                 var trigger = notification.getTriggerData();
-                if (trigger.temperature() != null) {
-                    messageBuilder.putData("temperature", String.valueOf(trigger.temperature()));
+                if (trigger.value() != null) {
+                    messageBuilder.putData("value", String.valueOf(trigger.value()));
                 }
-                if (trigger.ph() != null) {
-                    messageBuilder.putData("ph", String.valueOf(trigger.ph()));
+                if (trigger.sensorType() != null) {
+                    messageBuilder.putData("sensorType", trigger.sensorType().name());
                 }
                 if (trigger.hardwareStatus() != null) {
                     messageBuilder.putData("hardwareStatus", trigger.hardwareStatus());

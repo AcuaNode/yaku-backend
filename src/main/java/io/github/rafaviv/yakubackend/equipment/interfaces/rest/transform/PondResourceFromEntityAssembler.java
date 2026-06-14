@@ -9,7 +9,7 @@ public class PondResourceFromEntityAssembler {
                 entity.getId(),
                 entity.getFarmId(),
                 entity.getName(),
-                entity.getSpecies(),
+                entity.getSpecies() != null ? entity.getSpecies().name() : null,
                 entity.getVolume(),
                 entity.getStatus().name(),
                 entity.getAssignedOperatorId()

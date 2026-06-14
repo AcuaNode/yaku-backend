@@ -13,9 +13,8 @@ public class NotificationResourceMapper {
             NotificationType.valueOf(resource.type().toUpperCase()),
             resource.message(),
             resource.userId(),
-            resource.role(),
-            resource.temperature(),
-            resource.ph(),
+            resource.value(),
+            resource.sensorType(),
             resource.hardwareStatus()
         );
     }
@@ -26,8 +25,8 @@ public class NotificationResourceMapper {
             notification.getType().name(),
             notification.getMessage(),
             notification.getRecipient().userId(),
-            notification.getTriggerData().temperature(),
-            notification.getTriggerData().ph(),
+            notification.getTriggerData().value(),
+            notification.getTriggerData().sensorType() != null ? notification.getTriggerData().sensorType().name() : null,
             notification.getTriggerData().hardwareStatus(),
             notification.getCreatedAt()
         );

@@ -6,6 +6,7 @@ import io.github.rafaviv.yakubackend.telemetry.domain.model.queries.GetHistorica
 import io.github.rafaviv.yakubackend.telemetry.domain.model.queries.GetPondStatusQuery;
 import io.github.rafaviv.yakubackend.telemetry.infrastructure.persistence.jpa.repositories.MeasurementAggregateRepository;
 import io.github.rafaviv.yakubackend.telemetry.infrastructure.persistence.jpa.repositories.SensorReadingRepository;
+import io.github.rafaviv.yakubackend.telemetry.domain.model.valueobjects.Species;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -44,6 +45,6 @@ public class TelemetryQueryServiceImpl implements TelemetryQueryService {
 
     @Override
     public java.util.Optional<io.github.rafaviv.yakubackend.telemetry.domain.model.aggregates.Threshold> handle(io.github.rafaviv.yakubackend.telemetry.domain.model.queries.GetThresholdBySpeciesQuery query) {
-        return thresholdRepository.findBySpecies(query.species());
+        return thresholdRepository.findBySpecies(Species.valueOf(query.species()));
     }
 }

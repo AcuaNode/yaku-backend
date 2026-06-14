@@ -3,8 +3,8 @@ package io.github.rafaviv.yakubackend.notification.domain.models.valueobjects;
 import java.math.BigDecimal;
 
 public record TriggerSnapshot(
-    BigDecimal temperature,
-    BigDecimal ph,
+    BigDecimal value,
+    SensorType sensorType,
     String hardwareStatus
 ) {
 }

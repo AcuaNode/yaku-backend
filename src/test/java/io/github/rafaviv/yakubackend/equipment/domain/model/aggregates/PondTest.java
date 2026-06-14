@@ -1,6 +1,7 @@
 package io.github.rafaviv.yakubackend.equipment.domain.model.aggregates;
 
 import io.github.rafaviv.yakubackend.equipment.domain.model.valueobjects.PondStatus;
+import io.github.rafaviv.yakubackend.equipment.domain.model.valueobjects.Species;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +14,7 @@ class PondTest {
     void createPond_Successfully() {
         Long farmId = 1L;
         String name = "Pond A";
-        String species = "Tilapia";
+        Species species = Species.TILAPIA;
         Double volume = 1000.0;
 
         Pond pond = new Pond(farmId, name, species, volume);
@@ -28,7 +29,7 @@ class PondTest {
     @Test
     @DisplayName("Given active pond, When updating status, Then status changes")
     void updateStatus_Successfully() {
-        Pond pond = new Pond(1L, "Pond A", "Tilapia", 1000.0);
+        Pond pond = new Pond(1L, "Pond A", Species.TILAPIA, 1000.0);
 
         pond.updateStatus(PondStatus.FULL);
 
@@ -38,7 +39,7 @@ class PondTest {
     @Test
     @DisplayName("Given pond, When updating to all statuses, Then status changes correctly")
     void updateStatus_AllStatuses_Work() {
-        Pond pond = new Pond(1L, "Pond A", "Tilapia", 1000.0);
+        Pond pond = new Pond(1L, "Pond A", Species.TILAPIA, 1000.0);
 
         pond.updateStatus(PondStatus.ACTIVE);
         assertEquals(PondStatus.ACTIVE, pond.getStatus());

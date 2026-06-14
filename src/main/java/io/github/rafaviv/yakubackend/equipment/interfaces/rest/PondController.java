@@ -8,6 +8,7 @@ import io.github.rafaviv.yakubackend.equipment.domain.services.PondQueryService;
 import io.github.rafaviv.yakubackend.equipment.interfaces.rest.resources.PondResource;
 import io.github.rafaviv.yakubackend.equipment.interfaces.rest.transform.CreatePondResource;
 import io.github.rafaviv.yakubackend.equipment.interfaces.rest.transform.PondResourceFromEntityAssembler;
+import io.github.rafaviv.yakubackend.equipment.domain.model.valueobjects.Species;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +34,7 @@ public class PondController {
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<PondResource> createPond(@RequestBody CreatePondResource resource) {
-        var pond = pondCommandService.createPond(resource.farmId(), resource.name(), resource.species(), resource.volume());
+        var pond = pondCommandService.createPond(resource.farmId(), resource.name(), Species.valueOf(resource.species()), resource.volume());
         if (pond.isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
@@ -100,7 +101,7 @@ public class PondController {
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<PondResource> updatePond(@PathVariable Long id, @RequestBody CreatePondResource resource) {
-        return pondCommandService.updatePond(id, resource.name(), resource.species(), resource.volume())
+        return pondCommandService.updatePond(id, resource.name(), Species.valueOf(resource.species()), resource.volume())
                 .map(pond -> ResponseEntity.ok(PondResourceFromEntityAssembler.toResourceFromEntity(pond)))
                 .orElse(ResponseEntity.notFound().build());
     }

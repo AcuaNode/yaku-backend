@@ -7,7 +7,7 @@ public class ThresholdResourceFromEntityAssembler {
     public static ThresholdResource toResourceFromEntity(Threshold entity) {
         return new ThresholdResource(
                 entity.getId(),
-                entity.getSpecies(),
+                entity.getSpecies() != null ? entity.getSpecies().name() : null,
                 entity.getMinTemperature(),
                 entity.getMaxTemperature(),
                 entity.getMinPh(),

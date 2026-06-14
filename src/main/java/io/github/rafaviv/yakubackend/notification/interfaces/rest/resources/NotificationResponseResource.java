@@ -8,8 +8,8 @@ public record NotificationResponseResource(
     String type,
     String message,
     Long recipientUserId,
-    BigDecimal triggerTemperature,
-    BigDecimal triggerPh,
+    BigDecimal triggerValue,
+    String triggerSensorType,
     String triggerHardwareStatus,
     LocalDateTime createdAt
 ) {}

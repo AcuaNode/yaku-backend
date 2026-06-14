@@ -1,5 +1,6 @@
 package io.github.rafaviv.yakubackend.telemetry.domain.model.aggregates;
 
+import io.github.rafaviv.yakubackend.telemetry.domain.model.valueobjects.Species;
 import jakarta.persistence.*;
 import lombok.Getter;
 import org.springframework.data.domain.AbstractAggregateRoot;
@@ -13,8 +14,9 @@ public class Threshold extends AbstractAggregateRoot<Threshold> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, unique = true)
-    private String species;
+    private Species species;
 
     @Column(nullable = false)
     private Double minTemperature;
@@ -37,7 +39,7 @@ public class Threshold extends AbstractAggregateRoot<Threshold> {
     protected Threshold() {
     }
 
-    public Threshold(String species, Double minTemperature, Double maxTemperature, Double minPh, Double maxPh, Double minTurbidity, Double maxTurbidity) {
+    public Threshold(Species species, Double minTemperature, Double maxTemperature, Double minPh, Double maxPh, Double minTurbidity, Double maxTurbidity) {
         this.species = species;
         this.minTemperature = minTemperature;
         this.maxTemperature = maxTemperature;

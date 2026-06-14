@@ -46,7 +46,7 @@ public class TelemetryController {
     }
 
     @PostMapping("/manual-ingest")
-    public ResponseEntity<String> manualIngest(@RequestBody io.github.rafaviv.yakubackend.telemetry.domain.model.commands.ProcessIncomingReadingCommand command) {
+    public ResponseEntity<String> manualIngest(@RequestBody io.github.rafaviv.yakubackend.telemetry.domain.model.commands.ProcessGroupedTelemetryCommand command) {
         try {
             telemetryCommandService.handle(command);
             return ResponseEntity.ok("Telemetry ingested successfully");

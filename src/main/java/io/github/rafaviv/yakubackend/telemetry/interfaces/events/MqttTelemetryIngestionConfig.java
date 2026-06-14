@@ -2,7 +2,7 @@ package io.github.rafaviv.yakubackend.telemetry.interfaces.events;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.rafaviv.yakubackend.telemetry.application.internal.commandservices.TelemetryCommandService;
-import io.github.rafaviv.yakubackend.telemetry.domain.model.commands.ProcessIncomingReadingCommand;
+import io.github.rafaviv.yakubackend.telemetry.domain.model.commands.ProcessGroupedTelemetryCommand;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.annotation.ServiceActivator;
@@ -55,9 +55,9 @@ public class MqttTelemetryIngestionConfig {
             public void handleMessage(Message<?> message) {
                 try {
                     String payload = (String) message.getPayload();
-                    // Assuming the payload is a JSON matching ProcessIncomingReadingCommand
-                    ProcessIncomingReadingCommand command = objectMapper.readValue(payload,
-                            ProcessIncomingReadingCommand.class);
+                    // Assuming the payload is a JSON matching ProcessGroupedTelemetryCommand
+                    ProcessGroupedTelemetryCommand command = objectMapper.readValue(payload,
+                            ProcessGroupedTelemetryCommand.class);
                     telemetryCommandService.handle(command);
                 } catch (Exception e) {
                     System.err.println("Error processing MQTT message: " + e.getMessage());
