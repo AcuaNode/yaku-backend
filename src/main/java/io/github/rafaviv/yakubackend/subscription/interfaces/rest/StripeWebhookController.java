@@ -16,7 +16,7 @@ public class StripeWebhookController {
 
     private final StripeWebhookCommandServiceImpl stripeWebhookCommandService;
 
-    @Value("${stripe.webhook.secret}")
+    @Value("whsec_4f7a0690d4d54fcb8212718328742328297d12eaf659687c00beb8a1e15821bf")
     private String webhookSecret;
 
     public StripeWebhookController(StripeWebhookCommandServiceImpl stripeWebhookCommandService) {
