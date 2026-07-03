@@ -30,11 +30,11 @@ public class TelemetryCommandServiceImpl implements TelemetryCommandService {
     private final io.github.rafaviv.yakubackend.equipment.interfaces.acl.EquipmentContextFacade equipmentContextFacade;
 
     public TelemetryCommandServiceImpl(SensorReadingRepository sensorReadingRepository,
-                                       ThresholdRepository thresholdRepository,
-                                       SensorPondMappingRepository sensorPondMappingRepository,
-                                       ExternalEquipmentService externalEquipmentService,
-                                       ApplicationEventPublisher eventPublisher,
-                                       io.github.rafaviv.yakubackend.equipment.interfaces.acl.EquipmentContextFacade equipmentContextFacade) {
+            ThresholdRepository thresholdRepository,
+            SensorPondMappingRepository sensorPondMappingRepository,
+            ExternalEquipmentService externalEquipmentService,
+            ApplicationEventPublisher eventPublisher,
+            io.github.rafaviv.yakubackend.equipment.interfaces.acl.EquipmentContextFacade equipmentContextFacade) {
         this.sensorReadingRepository = sensorReadingRepository;
         this.thresholdRepository = thresholdRepository;
         this.sensorPondMappingRepository = sensorPondMappingRepository;
@@ -49,13 +49,16 @@ public class TelemetryCommandServiceImpl implements TelemetryCommandService {
         // Resolvemos el pondId dinámicamente usando el deviceId
         Long pondId = equipmentContextFacade.getPondIdByDeviceId(command.deviceId());
 
-        // We will assume the pond is valid. Saving the raw readings for non-null metrics
+        // We will assume the pond is valid. Saving the raw readings for non-null
+        // metrics
         java.time.LocalDateTime now = java.time.LocalDateTime.now();
         if (command.temperature() != null) {
-            sensorReadingRepository.save(new SensorReading(pondId, SensorType.TEMPERATURE, new MeasurementValue(command.temperature(), "C"), now));
+            sensorReadingRepository.save(new SensorReading(pondId, SensorType.TEMPERATURE,
+                    new MeasurementValue(command.temperature(), "C"), now));
         }
         if (command.turbidity() != null) {
-            sensorReadingRepository.save(new SensorReading(pondId, SensorType.TURBIDITY, new MeasurementValue(command.turbidity(), "NTU"), now));
+            sensorReadingRepository.save(new SensorReading(pondId, SensorType.TURBIDITY,
+                    new MeasurementValue(command.turbidity(), "NTU"), now));
         }
 
         try {
@@ -71,13 +74,13 @@ public class TelemetryCommandServiceImpl implements TelemetryCommandService {
                 // Validacion de Parametros (Lógica Condicional Segura)
                 if (command.temperature() != null && threshold.isTemperatureViolation(command.temperature())) {
                     anomaliesCount++;
-                    messageBuilder.append(String.format("TEMPERATURE level is %.2f (Allowed: [%.2f, %.2f]). ", 
+                    messageBuilder.append(String.format("TEMPERATURE level is %.2f (Allowed: [%.2f, %.2f]). ",
                             command.temperature(), threshold.getMinTemperature(), threshold.getMaxTemperature()));
                 }
 
                 if (command.turbidity() != null && threshold.isTurbidityViolation(command.turbidity())) {
                     anomaliesCount++;
-                    messageBuilder.append(String.format("TURBIDITY level is %.2f (Allowed: [%.2f, %.2f]). ", 
+                    messageBuilder.append(String.format("TURBIDITY level is %.2f (Allowed: [%.2f, %.2f]). ",
                             command.turbidity(), threshold.getMinTurbidity(), threshold.getMaxTurbidity()));
                 }
 
@@ -95,8 +98,7 @@ public class TelemetryCommandServiceImpl implements TelemetryCommandService {
                             pondId,
                             targetUserId,
                             severity,
-                            "[" + severity + "] " + messageBuilder.toString()
-                    );
+                            "[" + severity + "] " + messageBuilder.toString());
                     eventPublisher.publishEvent(event);
                 } else {
                     severity = "CRITICAL";
@@ -104,13 +106,14 @@ public class TelemetryCommandServiceImpl implements TelemetryCommandService {
                     Long operatorId = externalEquipmentService.getOperatorIdByPondId(pondId);
                     messageBuilder.append(String.format("For species %s in pond %d.", speciesName, pondId));
                     String finalMessage = "[" + severity + "] " + messageBuilder.toString();
-                    
+
                     // Alerta al Admin
                     eventPublisher.publishEvent(new ThresholdBreachedEvent(pondId, adminId, severity, finalMessage));
-                    
+
                     // Alerta al Operador (si es distinto al Admin)
                     if (!adminId.equals(operatorId)) {
-                        eventPublisher.publishEvent(new ThresholdBreachedEvent(pondId, operatorId, severity, finalMessage));
+                        eventPublisher
+                                .publishEvent(new ThresholdBreachedEvent(pondId, operatorId, severity, finalMessage));
                     }
                 }
             }, () -> {
@@ -130,17 +133,18 @@ public class TelemetryCommandServiceImpl implements TelemetryCommandService {
 
     @Override
     @Transactional
-    public Long handle(io.github.rafaviv.yakubackend.telemetry.domain.model.commands.ConfigureThresholdCommand command) {
+    public Long handle(
+            io.github.rafaviv.yakubackend.telemetry.domain.model.commands.ConfigureThresholdCommand command) {
         var speciesEnum = Species.valueOf(command.species());
         var thresholdOptional = thresholdRepository.findBySpecies(speciesEnum);
+
         if (thresholdOptional.isPresent()) {
             var threshold = thresholdOptional.get();
             threshold.update(
                     command.minTemperature(),
                     command.maxTemperature(),
                     command.minTurbidity(),
-                    command.maxTurbidity()
-            );
+                    command.maxTurbidity());
             thresholdRepository.save(threshold);
             return threshold.getId();
         }
@@ -150,8 +154,7 @@ public class TelemetryCommandServiceImpl implements TelemetryCommandService {
                 command.minTemperature(),
                 command.maxTemperature(),
                 command.minTurbidity(),
-                command.maxTurbidity()
-        );
+                command.maxTurbidity());
         thresholdRepository.save(threshold);
         return threshold.getId();
     }

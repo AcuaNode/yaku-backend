@@ -14,13 +14,13 @@ import jakarta.annotation.PostConstruct;
 @Component
 public class StripePaymentConnector implements ExternalPaymentGateway {
 
-    @Value("${stripe.secret.key}")
+    @Value("sk_test_51TaSZKEyn9JTtfs5vSxxdR8xCTvPhqpsO26dNHk9C30Bejv8PNjHERtKy0Rh5s0Oe0MpOvg51bx9TV2SDPctQkQs00fUAIB4Nq")
     private String secretKey;
 
-    @Value("${stripe.success.url}")
+    @Value("https://front-opensource.web.app/payment-success")
     private String successUrl;
 
-    @Value("${stripe.cancel.url}")
+    @Value("https://front-opensource.web.app/payment-cancel")
     private String cancelUrl;
 
     @PostConstruct
