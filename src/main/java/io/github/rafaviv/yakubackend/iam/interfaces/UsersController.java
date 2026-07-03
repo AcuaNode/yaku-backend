@@ -225,11 +225,13 @@ public class UsersController {
 
             List<User> users;
             if (farmId != null) {
-                users = userQueryService.handle(new io.github.rafaviv.yakubackend.iam.domain.model.queries.GetUsersByFarmIdQuery(farmId));
+                users = userQueryService.handle(
+                        new io.github.rafaviv.yakubackend.iam.domain.model.queries.GetUsersByFarmIdQuery(farmId));
             } else {
-                users = userQueryService.handle(new io.github.rafaviv.yakubackend.iam.domain.model.queries.GetAllUsersQuery());
+                users = userQueryService
+                        .handle(new io.github.rafaviv.yakubackend.iam.domain.model.queries.GetAllUsersQuery());
             }
-            
+
             List<UserResource> userResources = users.stream()
                     .map(UserResourceFromEntityAssembler::toResourceFromEntity)
                     .toList();

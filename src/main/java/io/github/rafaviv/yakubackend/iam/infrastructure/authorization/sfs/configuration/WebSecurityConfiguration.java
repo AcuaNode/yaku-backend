@@ -91,6 +91,7 @@ public class WebSecurityConfiguration {
                         .requestMatchers("/api/v1/users/signup", "/api/v1/users/signup/**").permitAll()
                         .requestMatchers("/api/v1/users/signin", "/api/v1/users/signin/**").permitAll()
                         .requestMatchers("/api/v1/webhooks/", "/api/v1/webhooks/**").permitAll()
+                        .requestMatchers("/api/v1/telemetry/manual-ingest", "/api/v1/telemetry/manual-ingest/**").permitAll()
                         .requestMatchers(
                                 "/api/v1/users/available-roles",
                                 "/v3/api-docs/**",

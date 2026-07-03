@@ -24,11 +24,7 @@ public class Threshold extends AbstractAggregateRoot<Threshold> {
     @Column(nullable = false)
     private Double maxTemperature;
 
-    @Column(nullable = false)
-    private Double minPh;
 
-    @Column(nullable = false)
-    private Double maxPh;
 
     @Column(nullable = false)
     private Double minTurbidity;
@@ -39,22 +35,23 @@ public class Threshold extends AbstractAggregateRoot<Threshold> {
     protected Threshold() {
     }
 
-    public Threshold(Species species, Double minTemperature, Double maxTemperature, Double minPh, Double maxPh, Double minTurbidity, Double maxTurbidity) {
+    public Threshold(Species species, Double minTemperature, Double maxTemperature, Double minTurbidity, Double maxTurbidity) {
         this.species = species;
         this.minTemperature = minTemperature;
         this.maxTemperature = maxTemperature;
-        this.minPh = minPh;
-        this.maxPh = maxPh;
+        this.minTurbidity = minTurbidity;
+        this.maxTurbidity = maxTurbidity;
+    }
+
+    public void update(Double minTemperature, Double maxTemperature, Double minTurbidity, Double maxTurbidity) {
+        this.minTemperature = minTemperature;
+        this.maxTemperature = maxTemperature;
         this.minTurbidity = minTurbidity;
         this.maxTurbidity = maxTurbidity;
     }
 
     public boolean isTemperatureViolation(Double temperature) {
         return temperature < minTemperature || temperature > maxTemperature;
-    }
-
-    public boolean isPhViolation(Double ph) {
-        return ph < minPh || ph > maxPh;
     }
 
     public boolean isTurbidityViolation(Double turbidity) {
