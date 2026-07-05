@@ -19,6 +19,8 @@ public class EquipmentContextFacadeImpl implements EquipmentContextFacade {
     public Long getPondIdByDeviceId(String deviceId) {
         return equipmentRepository.findByPhysicalCode(deviceId)
                 .map(io.github.rafaviv.yakubackend.equipment.domain.model.aggregates.Equipment::getPondId)
-                .orElseThrow(() -> new IllegalArgumentException("Device not found or not linked to any pond: " + deviceId));
+                .orElseGet(() -> equipmentRepository.findByPhysicalCode(deviceId + "-TEMP")
+                        .map(io.github.rafaviv.yakubackend.equipment.domain.model.aggregates.Equipment::getPondId)
+                        .orElseThrow(() -> new IllegalArgumentException("Device not found or not linked to any pond: " + deviceId)));
     }
 }

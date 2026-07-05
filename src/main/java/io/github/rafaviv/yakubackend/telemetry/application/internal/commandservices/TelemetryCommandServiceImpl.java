@@ -15,7 +15,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+
+import java.util.Locale;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import io.github.rafaviv.yakubackend.shared.infrastructure.messaging.mqtt.MqttPublisherConfig.MqttPublisher;
 
 @Service
 public class TelemetryCommandServiceImpl implements TelemetryCommandService {
@@ -28,6 +32,9 @@ public class TelemetryCommandServiceImpl implements TelemetryCommandService {
     private final ExternalEquipmentService externalEquipmentService;
     private final ApplicationEventPublisher eventPublisher;
     private final io.github.rafaviv.yakubackend.equipment.interfaces.acl.EquipmentContextFacade equipmentContextFacade;
+
+    @Autowired(required = false)
+    private MqttPublisher mqttPublisher;
 
     public TelemetryCommandServiceImpl(SensorReadingRepository sensorReadingRepository,
             ThresholdRepository thresholdRepository,
@@ -60,6 +67,10 @@ public class TelemetryCommandServiceImpl implements TelemetryCommandService {
             sensorReadingRepository.save(new SensorReading(pondId, SensorType.TURBIDITY,
                     new MeasurementValue(command.turbidity(), "NTU"), now));
         }
+        if (command.ica() != null) {
+            sensorReadingRepository.save(new SensorReading(pondId, SensorType.ICA,
+                    new MeasurementValue(command.ica(), "INDEX"), now));
+        }
 
         try {
             // Resolucion de Identidad
@@ -90,7 +101,7 @@ public class TelemetryCommandServiceImpl implements TelemetryCommandService {
                 }
 
                 String severity;
-                if (anomaliesCount == 1 || anomaliesCount == 2) {
+                if (anomaliesCount == 1) {
                     severity = "WARNING";
                     Long targetUserId = externalEquipmentService.getOperatorIdByPondId(pondId);
                     messageBuilder.append(String.format("For species %s in pond %d.", speciesName, pondId));
@@ -138,24 +149,37 @@ public class TelemetryCommandServiceImpl implements TelemetryCommandService {
         var speciesEnum = Species.valueOf(command.species());
         var thresholdOptional = thresholdRepository.findBySpecies(speciesEnum);
 
+        io.github.rafaviv.yakubackend.telemetry.domain.model.aggregates.Threshold threshold;
+
         if (thresholdOptional.isPresent()) {
-            var threshold = thresholdOptional.get();
+            threshold = thresholdOptional.get();
             threshold.update(
                     command.minTemperature(),
                     command.maxTemperature(),
                     command.minTurbidity(),
                     command.maxTurbidity());
             thresholdRepository.save(threshold);
-            return threshold.getId();
+        } else {
+            threshold = new io.github.rafaviv.yakubackend.telemetry.domain.model.aggregates.Threshold(
+                    speciesEnum,
+                    command.minTemperature(),
+                    command.maxTemperature(),
+                    command.minTurbidity(),
+                    command.maxTurbidity());
+            thresholdRepository.save(threshold);
         }
 
-        var threshold = new io.github.rafaviv.yakubackend.telemetry.domain.model.aggregates.Threshold(
-                speciesEnum,
-                command.minTemperature(),
-                command.maxTemperature(),
-                command.minTurbidity(),
-                command.maxTurbidity());
-        thresholdRepository.save(threshold);
+        // Publish to MQTT
+        if (mqttPublisher != null) {
+            try {
+                String message = String.format(Locale.US, "{\"maxTemp\": %.2f, \"maxTurb\": %.2f}",
+                        threshold.getMaxTemperature(), threshold.getMaxTurbidity());
+                mqttPublisher.publishToMqtt("yaku/config/thresholds/" + threshold.getSpecies(), message);
+            } catch (Exception e) {
+                log.error("Failed to publish thresholds to MQTT: {}", e.getMessage());
+            }
+        }
+
         return threshold.getId();
     }
 }

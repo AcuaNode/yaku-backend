@@ -5,6 +5,8 @@ import io.github.rafaviv.yakubackend.telemetry.domain.model.commands.ProcessGrou
 
 public interface TelemetryCommandService {
     void handle(ProcessGroupedTelemetryCommand command);
+
     void handle(GenerateAggregatesCommand command);
+
     Long handle(io.github.rafaviv.yakubackend.telemetry.domain.model.commands.ConfigureThresholdCommand command);
 }
