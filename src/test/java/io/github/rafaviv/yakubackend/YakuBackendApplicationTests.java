@@ -13,7 +13,8 @@ import org.springframework.test.context.TestPropertySource;
         "spring.jpa.hibernate.ddl-auto=create-drop",
         "spring.jpa.database-platform=org.hibernate.dialect.H2Dialect",
         "spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.mqtt.MqttAutoConfiguration,org.springframework.boot.autoconfigure.integration.IntegrationAutoConfiguration",
-        "spring.sql.init.mode=never"
+        "spring.sql.init.mode=never",
+        "mqtt.enabled=false"
 })
 class YakuBackendApplicationTests {
 
