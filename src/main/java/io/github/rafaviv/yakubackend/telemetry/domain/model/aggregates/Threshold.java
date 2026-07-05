@@ -32,7 +32,7 @@ public class Threshold extends AbstractAggregateRoot<Threshold> {
     @Column(nullable = false)
     private Double maxTurbidity;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Double ica;
 
     protected Threshold() {
