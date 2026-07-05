@@ -1,6 +1,7 @@
 package io.github.rafaviv.yakubackend.shared.infrastructure.messaging.mqtt;
 
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.annotation.IntegrationComponentScan;
@@ -15,6 +16,7 @@ import org.springframework.messaging.MessageHandler;
 
 @Configuration
 @IntegrationComponentScan
+@ConditionalOnProperty(name = "mqtt.enabled", havingValue = "true", matchIfMissing = false)
 public class MqttPublisherConfig {
 
     private static final String MQTT_BROKER_URL = "tcp://localhost:1883";
