@@ -4,9 +4,11 @@ import io.github.rafaviv.yakubackend.telemetry.domain.model.aggregates.Threshold
 import io.github.rafaviv.yakubackend.telemetry.domain.model.valueobjects.Species;
 import io.github.rafaviv.yakubackend.telemetry.infrastructure.persistence.jpa.repositories.ThresholdRepository;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 @Component
+@Order(2)
 public class ThresholdSeeder implements CommandLineRunner {
     private final ThresholdRepository thresholdRepository;
 
