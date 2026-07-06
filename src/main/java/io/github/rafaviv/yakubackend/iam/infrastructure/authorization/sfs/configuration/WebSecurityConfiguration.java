@@ -78,7 +78,8 @@ public class WebSecurityConfiguration {
                             "http://localhost:*",
                             "http://127.0.0.1:*",
                             "https://*.azurestaticapps.net",
-                            "https://*.web.core.windows.net"
+                            "https://*.web.core.windows.net",
+                            "https://*.z*.web.core.windows.net"
                     ));
                     corsConfig.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
                     corsConfig.setAllowedHeaders(List.of("*"));
